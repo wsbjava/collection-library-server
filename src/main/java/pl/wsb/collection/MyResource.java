@@ -1,5 +1,6 @@
 package pl.wsb.collection;
 
+import javax.persistence.Persistence;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -20,6 +21,8 @@ public class MyResource {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String getIt() {
+
+        Persistence.createEntityManagerFactory("manager").createEntityManager();
         return "Got it!";
     }
 }
