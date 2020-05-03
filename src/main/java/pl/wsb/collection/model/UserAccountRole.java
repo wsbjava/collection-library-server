@@ -3,6 +3,7 @@ package pl.wsb.collection.model;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
 
 
 /**
@@ -10,8 +11,7 @@ import java.sql.Timestamp;
  * 
  */
 @Entity
-@Table(name="user_account_role")
-@NamedQuery(name="UserAccountRole.findAll", query="SELECT u FROM UserAccountRole u")
+@Table(name="user_account_role", catalog = "collection_management", uniqueConstraints =@UniqueConstraint(columnNames = {"user_account_id", "role_id" }))
 public class UserAccountRole implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -20,10 +20,12 @@ public class UserAccountRole implements Serializable {
 	@Column(unique=true, nullable=false)
 	private int id;
 
-	private Timestamp created;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date created;
 
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable=false)
-	private Timestamp modified;
+	private Date modified;
 
 	//bi-directional many-to-one association to Role
 	@ManyToOne(fetch=FetchType.LAZY)
@@ -38,6 +40,19 @@ public class UserAccountRole implements Serializable {
 	public UserAccountRole() {
 	}
 
+	public UserAccountRole(Role role, UserAccount userAccount, Date modified) {
+		this.role = role;
+		this.userAccount = userAccount;
+		this.modified = modified;
+	}
+	public UserAccountRole(Role role, UserAccount userAccount, Date created, Date
+			modified) {
+		this.role = role;
+		this.userAccount = userAccount;
+		this.created = created;
+		this.modified = modified;
+	}
+
 	public int getId() {
 		return this.id;
 	}
@@ -46,19 +61,19 @@ public class UserAccountRole implements Serializable {
 		this.id = id;
 	}
 
-	public Timestamp getCreated() {
+	public Date getCreated() {
 		return this.created;
 	}
 
-	public void setCreated(Timestamp created) {
+	public void setCreated(Date created) {
 		this.created = created;
 	}
 
-	public Timestamp getModified() {
+	public Date getModified() {
 		return this.modified;
 	}
 
-	public void setModified(Timestamp modified) {
+	public void setModified(Date modified) {
 		this.modified = modified;
 	}
 

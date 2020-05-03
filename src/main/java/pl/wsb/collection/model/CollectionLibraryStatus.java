@@ -3,7 +3,10 @@ package pl.wsb.collection.model;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -11,8 +14,7 @@ import java.util.List;
  * 
  */
 @Entity
-@Table(name="collection_library_status")
-@NamedQuery(name="CollectionLibraryStatus.findAll", query="SELECT c FROM CollectionLibraryStatus c")
+@Table(name="collection_library_status", catalog = "collection_management", uniqueConstraints = @UniqueConstraint(columnNames = "abbr"))
 public class CollectionLibraryStatus implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -24,22 +26,40 @@ public class CollectionLibraryStatus implements Serializable {
 	@Column(nullable=false, length=20)
 	private String abbr;
 
-	private Timestamp created;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date created;
 
 	private int deleted;
 
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable=false)
-	private Timestamp modified;
+	private Date modified;
 
 	@Column(length=255)
 	private String name;
 
 	//bi-directional many-to-one association to CollectionLibrary
-	@OneToMany(mappedBy="collectionLibraryStatus")
-	private List<CollectionLibrary> collectionLibraries;
+	@OneToMany(fetch = FetchType.LAZY,  mappedBy="collectionLibraryStatus")
+	private Set<CollectionLibrary> collectionLibraries = new HashSet<>(0);
 
 	public CollectionLibraryStatus() {
 	}
+
+	public CollectionLibraryStatus(Date modified, String abbr){
+		this.modified = modified;
+		this.abbr = abbr;
+	}
+
+	public CollectionLibraryStatus(Date created, Date modified, String name, String abbr, int deleted, Set<CollectionLibrary> collectionLibraries) {
+		this.created = created;
+		this.modified = modified;
+		this.name = name;
+		this.abbr = abbr;
+		this.deleted = deleted;
+		this.collectionLibraries = collectionLibraries;
+
+	}
+
 
 	public int getId() {
 		return this.id;
@@ -57,11 +77,11 @@ public class CollectionLibraryStatus implements Serializable {
 		this.abbr = abbr;
 	}
 
-	public Timestamp getCreated() {
+	public Date getCreated() {
 		return this.created;
 	}
 
-	public void setCreated(Timestamp created) {
+	public void setCreated(Date created) {
 		this.created = created;
 	}
 
@@ -73,11 +93,11 @@ public class CollectionLibraryStatus implements Serializable {
 		this.deleted = deleted;
 	}
 
-	public Timestamp getModified() {
+	public Date getModified() {
 		return this.modified;
 	}
 
-	public void setModified(Timestamp modified) {
+	public void setModified(Date modified) {
 		this.modified = modified;
 	}
 
@@ -89,26 +109,12 @@ public class CollectionLibraryStatus implements Serializable {
 		this.name = name;
 	}
 
-	public List<CollectionLibrary> getCollectionLibraries() {
+	public Set<CollectionLibrary> getCollectionLibraries() {
 		return this.collectionLibraries;
 	}
 
-	public void setCollectionLibraries(List<CollectionLibrary> collectionLibraries) {
+	public void setCollectionLibraries(Set<CollectionLibrary> collectionLibraries) {
 		this.collectionLibraries = collectionLibraries;
-	}
-
-	public CollectionLibrary addCollectionLibrary(CollectionLibrary collectionLibrary) {
-		getCollectionLibraries().add(collectionLibrary);
-		collectionLibrary.setCollectionLibraryStatus(this);
-
-		return collectionLibrary;
-	}
-
-	public CollectionLibrary removeCollectionLibrary(CollectionLibrary collectionLibrary) {
-		getCollectionLibraries().remove(collectionLibrary);
-		collectionLibrary.setCollectionLibraryStatus(null);
-
-		return collectionLibrary;
 	}
 
 }

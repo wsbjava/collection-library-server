@@ -3,7 +3,10 @@ package pl.wsb.collection.model;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -11,8 +14,7 @@ import java.util.List;
  * 
  */
 @Entity
-@Table(name="publisher")
-@NamedQuery(name="Publisher.findAll", query="SELECT p FROM Publisher p")
+@Table(name="publisher", catalog = "collection_management")
 public class Publisher implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -21,22 +23,37 @@ public class Publisher implements Serializable {
 	@Column(unique=true, nullable=false)
 	private int id;
 
-	private Timestamp created;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date created;
 
 	private int deleted;
 
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable=false)
-	private Timestamp modified;
+	private Date modified;
 
 	@Column(length=255)
 	private String name;
 
 	//bi-directional many-to-one association to CollectionEntryPublisher
-	@OneToMany(mappedBy="publisher")
-	private List<CollectionEntryPublisher> collectionEntryPublishers;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy="publisher")
+	private Set<CollectionEntryPublisher> collectionEntryPublishers = new HashSet<>(0);
 
 	public Publisher() {
 	}
+
+	public Publisher(Date modified, String name){
+		this.modified = modified;
+		this.name = name;
+	}
+	public Publisher(Date created, Date modified, String name, int deleted, Set<CollectionEntryPublisher> collectionEntryPublishers){
+		this.created = created;
+		this.modified = modified;
+		this.name = name;
+		this.deleted = deleted;
+		this.collectionEntryPublishers = collectionEntryPublishers;
+	}
+
 
 	public int getId() {
 		return this.id;
@@ -46,11 +63,11 @@ public class Publisher implements Serializable {
 		this.id = id;
 	}
 
-	public Timestamp getCreated() {
+	public Date getCreated() {
 		return this.created;
 	}
 
-	public void setCreated(Timestamp created) {
+	public void setCreated(Date created) {
 		this.created = created;
 	}
 
@@ -62,11 +79,11 @@ public class Publisher implements Serializable {
 		this.deleted = deleted;
 	}
 
-	public Timestamp getModified() {
+	public Date getModified() {
 		return this.modified;
 	}
 
-	public void setModified(Timestamp modified) {
+	public void setModified(Date modified) {
 		this.modified = modified;
 	}
 
@@ -78,26 +95,12 @@ public class Publisher implements Serializable {
 		this.name = name;
 	}
 
-	public List<CollectionEntryPublisher> getCollectionEntryPublishers() {
+	public Set<CollectionEntryPublisher> getCollectionEntryPublishers() {
 		return this.collectionEntryPublishers;
 	}
 
-	public void setCollectionEntryPublishers(List<CollectionEntryPublisher> collectionEntryPublishers) {
+	public void setCollectionEntryPublishers(Set<CollectionEntryPublisher> collectionEntryPublishers) {
 		this.collectionEntryPublishers = collectionEntryPublishers;
-	}
-
-	public CollectionEntryPublisher addCollectionEntryPublisher(CollectionEntryPublisher collectionEntryPublisher) {
-		getCollectionEntryPublishers().add(collectionEntryPublisher);
-		collectionEntryPublisher.setPublisher(this);
-
-		return collectionEntryPublisher;
-	}
-
-	public CollectionEntryPublisher removeCollectionEntryPublisher(CollectionEntryPublisher collectionEntryPublisher) {
-		getCollectionEntryPublishers().remove(collectionEntryPublisher);
-		collectionEntryPublisher.setPublisher(null);
-
-		return collectionEntryPublisher;
 	}
 
 }

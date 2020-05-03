@@ -3,7 +3,10 @@ package pl.wsb.collection.model;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -11,8 +14,7 @@ import java.util.List;
  * 
  */
 @Entity
-@Table(name="collection_request_status")
-@NamedQuery(name="CollectionRequestStatus.findAll", query="SELECT c FROM CollectionRequestStatus c")
+@Table(name="collection_request_status", catalog = "collection_management", uniqueConstraints = @UniqueConstraint(columnNames = "abbr"))
 public class CollectionRequestStatus implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -24,22 +26,39 @@ public class CollectionRequestStatus implements Serializable {
 	@Column(nullable=false, length=20)
 	private String abbr;
 
-	private Timestamp created;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date created;
 
 	private int deleted;
 
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable=false)
-	private Timestamp modified;
+	private Date modified;
 
 	@Column(length=255)
 	private String name;
 
 	//bi-directional many-to-one association to CollectionEntry
-	@OneToMany(mappedBy="collectionRequestStatus")
-	private List<CollectionEntry> collectionEntries;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy="collectionRequestStatus")
+	private Set<CollectionEntry> collectionEntries = new HashSet<>(0);
 
 	public CollectionRequestStatus() {
 	}
+
+	public CollectionRequestStatus(Date modified, String abbr){
+		this.modified = modified;
+		this.abbr = abbr;
+	}
+
+	public CollectionRequestStatus(Date created, Date modified, String name, String abbr, int deleted, Set<CollectionEntry> collectionEntries){
+		this.created = created;
+		this.modified = modified;
+		this.name = name;
+		this.abbr = abbr;
+		this.deleted = deleted;
+		this.collectionEntries = collectionEntries;
+	}
+
 
 	public int getId() {
 		return this.id;
@@ -57,11 +76,11 @@ public class CollectionRequestStatus implements Serializable {
 		this.abbr = abbr;
 	}
 
-	public Timestamp getCreated() {
+	public Date getCreated() {
 		return this.created;
 	}
 
-	public void setCreated(Timestamp created) {
+	public void setCreated(Date created) {
 		this.created = created;
 	}
 
@@ -73,11 +92,11 @@ public class CollectionRequestStatus implements Serializable {
 		this.deleted = deleted;
 	}
 
-	public Timestamp getModified() {
+	public Date getModified() {
 		return this.modified;
 	}
 
-	public void setModified(Timestamp modified) {
+	public void setModified(Date modified) {
 		this.modified = modified;
 	}
 
@@ -89,26 +108,14 @@ public class CollectionRequestStatus implements Serializable {
 		this.name = name;
 	}
 
-	public List<CollectionEntry> getCollectionEntries() {
+	public Set<CollectionEntry> getCollectionEntries() {
 		return this.collectionEntries;
 	}
 
-	public void setCollectionEntries(List<CollectionEntry> collectionEntries) {
+	public void setCollectionEntries(Set<CollectionEntry> collectionEntries) {
 		this.collectionEntries = collectionEntries;
 	}
 
-	public CollectionEntry addCollectionEntry(CollectionEntry collectionEntry) {
-		getCollectionEntries().add(collectionEntry);
-		collectionEntry.setCollectionRequestStatus(this);
 
-		return collectionEntry;
-	}
-
-	public CollectionEntry removeCollectionEntry(CollectionEntry collectionEntry) {
-		getCollectionEntries().remove(collectionEntry);
-		collectionEntry.setCollectionRequestStatus(null);
-
-		return collectionEntry;
-	}
 
 }

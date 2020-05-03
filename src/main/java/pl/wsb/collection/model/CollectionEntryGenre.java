@@ -3,6 +3,7 @@ package pl.wsb.collection.model;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
 
 
 /**
@@ -10,8 +11,7 @@ import java.sql.Timestamp;
  * 
  */
 @Entity
-@Table(name="collection_entry_genre")
-@NamedQuery(name="CollectionEntryGenre.findAll", query="SELECT c FROM CollectionEntryGenre c")
+@Table(name="collection_entry_genre", catalog = "collection_management", uniqueConstraints = @UniqueConstraint(columnNames = {"collection_entry_id","genre_id"}))
 public class CollectionEntryGenre implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -20,10 +20,12 @@ public class CollectionEntryGenre implements Serializable {
 	@Column(unique=true, nullable=false)
 	private int id;
 
-	private Timestamp created;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date created;
 
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable=false)
-	private Timestamp modified;
+	private Date modified;
 
 	//bi-directional many-to-one association to CollectionEntry
 	@ManyToOne(fetch=FetchType.LAZY)
@@ -37,6 +39,20 @@ public class CollectionEntryGenre implements Serializable {
 
 	public CollectionEntryGenre() {
 	}
+	public CollectionEntryGenre(CollectionEntry collectionEntry, Genre genre, Date modified)
+	{
+		this.collectionEntry = collectionEntry;
+		this.genre = genre;
+		this.modified = modified;
+	}
+
+	public CollectionEntryGenre(CollectionEntry collectionEntry, Genre genre, Date created, Date modified)
+	{
+		this.collectionEntry = collectionEntry;
+		this.genre = genre;
+		this.created = created;
+		this.modified = modified;
+	}
 
 	public int getId() {
 		return this.id;
@@ -46,19 +62,19 @@ public class CollectionEntryGenre implements Serializable {
 		this.id = id;
 	}
 
-	public Timestamp getCreated() {
+	public Date getCreated() {
 		return this.created;
 	}
 
-	public void setCreated(Timestamp created) {
+	public void setCreated(Date created) {
 		this.created = created;
 	}
 
-	public Timestamp getModified() {
+	public Date getModified() {
 		return this.modified;
 	}
 
-	public void setModified(Timestamp modified) {
+	public void setModified(Date modified) {
 		this.modified = modified;
 	}
 

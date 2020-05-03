@@ -2,6 +2,7 @@ package pl.wsb.collection.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.sql.Date;
 import java.sql.Timestamp;
 
 
@@ -10,8 +11,7 @@ import java.sql.Timestamp;
  * 
  */
 @Entity
-@Table(name="collection_library")
-@NamedQuery(name="CollectionLibrary.findAll", query="SELECT c FROM CollectionLibrary c")
+@Table(name="collection_library", catalog = "collection_management", uniqueConstraints = @UniqueConstraint(columnNames = {"collection_entry_id", "user_account_id"}))
 public class CollectionLibrary implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -20,13 +20,16 @@ public class CollectionLibrary implements Serializable {
 	@Column(unique=true, nullable=false)
 	private int id;
 
-	private Timestamp created;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date created;
 
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="entry_return")
-	private Timestamp entryReturn;
+	private Date entryReturn;
 
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable=false)
-	private Timestamp modified;
+	private Date modified;
 
 	//bi-directional many-to-one association to CollectionEntry
 	@ManyToOne(fetch=FetchType.LAZY)
@@ -46,6 +49,21 @@ public class CollectionLibrary implements Serializable {
 	public CollectionLibrary() {
 	}
 
+	public CollectionLibrary(CollectionEntry collectionEntry, CollectionLibraryStatus collectionLibraryStatus, UserAccount userAccount, Date modified){
+		this.collectionEntry = collectionEntry;
+		this.collectionLibraryStatus = collectionLibraryStatus;
+		this.userAccount = userAccount;
+		this.modified = modified;
+	}
+
+	public CollectionLibrary(CollectionEntry collectionEntry, CollectionLibraryStatus collectionLibraryStatus, UserAccount userAccount, Date created, Date modified){
+		this.collectionEntry = collectionEntry;
+		this.collectionLibraryStatus = collectionLibraryStatus;
+		this.userAccount = userAccount;
+		this.created = created;
+		this.modified = modified;
+	}
+
 	public int getId() {
 		return this.id;
 	}
@@ -54,27 +72,27 @@ public class CollectionLibrary implements Serializable {
 		this.id = id;
 	}
 
-	public Timestamp getCreated() {
+	public Date getCreated() {
 		return this.created;
 	}
 
-	public void setCreated(Timestamp created) {
+	public void setCreated(Date created) {
 		this.created = created;
 	}
 
-	public Timestamp getEntryReturn() {
+	public Date getEntryReturn() {
 		return this.entryReturn;
 	}
 
-	public void setEntryReturn(Timestamp entryReturn) {
+	public void setEntryReturn(Date entryReturn) {
 		this.entryReturn = entryReturn;
 	}
 
-	public Timestamp getModified() {
+	public Date getModified() {
 		return this.modified;
 	}
 
-	public void setModified(Timestamp modified) {
+	public void setModified(Date modified) {
 		this.modified = modified;
 	}
 

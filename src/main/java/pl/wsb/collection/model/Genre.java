@@ -3,7 +3,10 @@ package pl.wsb.collection.model;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -11,8 +14,7 @@ import java.util.List;
  * 
  */
 @Entity
-@Table(name="genre")
-@NamedQuery(name="Genre.findAll", query="SELECT g FROM Genre g")
+@Table(name="genre", catalog = "collection_management", uniqueConstraints = @UniqueConstraint(columnNames = "abbr"))
 public class Genre implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -21,28 +23,45 @@ public class Genre implements Serializable {
 	@Column(unique=true, nullable=false)
 	private int id;
 
-	@Column(nullable=false, length=20)
+	@Column(unique = true, nullable=false, length=20)
 	private String abbr;
 
-	private Timestamp created;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date created;
 
 	private int deleted;
 
 	@Column(nullable=false)
-	private Timestamp modified;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date modified;
 
 	@Column(length=255)
 	private String name;
 
 	//bi-directional many-to-one association to CollectionEntryGenre
-	@OneToMany(mappedBy="genre")
-	private List<CollectionEntryGenre> collectionEntryGenres;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy="genre")
+	private Set<CollectionEntryGenre> collectionEntryGenres = new HashSet<>(0);
 
 	//bi-directional many-to-one association to GenreCollectionType
-	@OneToMany(mappedBy="genre")
-	private List<GenreCollectionType> genreCollectionTypes;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy="genre")
+	private Set<GenreCollectionType> genreCollectionTypes = new HashSet<>(0);
 
 	public Genre() {
+	}
+
+	public Genre(Date modified, String abbr){
+		this.modified = modified;
+		this.abbr = abbr;
+	}
+
+	public Genre(Date created, Date modified, String name, String abbr, int deleted, Set<CollectionEntryGenre> collectionEntryGenres, Set<GenreCollectionType> genreCollectionTypes){
+		this.created = created;
+		this.modified = modified;
+		this.name = name;
+		this.abbr = abbr;
+		this.deleted = deleted;
+		this.collectionEntryGenres = collectionEntryGenres;
+		this.genreCollectionTypes = genreCollectionTypes;
 	}
 
 	public int getId() {
@@ -61,11 +80,11 @@ public class Genre implements Serializable {
 		this.abbr = abbr;
 	}
 
-	public Timestamp getCreated() {
+	public Date getCreated() {
 		return this.created;
 	}
 
-	public void setCreated(Timestamp created) {
+	public void setCreated(Date created) {
 		this.created = created;
 	}
 
@@ -77,11 +96,11 @@ public class Genre implements Serializable {
 		this.deleted = deleted;
 	}
 
-	public Timestamp getModified() {
+	public Date getModified() {
 		return this.modified;
 	}
 
-	public void setModified(Timestamp modified) {
+	public void setModified(Date modified) {
 		this.modified = modified;
 	}
 
@@ -93,48 +112,20 @@ public class Genre implements Serializable {
 		this.name = name;
 	}
 
-	public List<CollectionEntryGenre> getCollectionEntryGenres() {
+	public Set<CollectionEntryGenre> getCollectionEntryGenres() {
 		return this.collectionEntryGenres;
 	}
 
-	public void setCollectionEntryGenres(List<CollectionEntryGenre> collectionEntryGenres) {
+	public void setCollectionEntryGenres(Set<CollectionEntryGenre> collectionEntryGenres) {
 		this.collectionEntryGenres = collectionEntryGenres;
 	}
 
-	public CollectionEntryGenre addCollectionEntryGenre(CollectionEntryGenre collectionEntryGenre) {
-		getCollectionEntryGenres().add(collectionEntryGenre);
-		collectionEntryGenre.setGenre(this);
-
-		return collectionEntryGenre;
-	}
-
-	public CollectionEntryGenre removeCollectionEntryGenre(CollectionEntryGenre collectionEntryGenre) {
-		getCollectionEntryGenres().remove(collectionEntryGenre);
-		collectionEntryGenre.setGenre(null);
-
-		return collectionEntryGenre;
-	}
-
-	public List<GenreCollectionType> getGenreCollectionTypes() {
+	public Set<GenreCollectionType> getGenreCollectionTypes() {
 		return this.genreCollectionTypes;
 	}
 
-	public void setGenreCollectionTypes(List<GenreCollectionType> genreCollectionTypes) {
+	public void setGenreCollectionTypes(Set<GenreCollectionType> genreCollectionTypes) {
 		this.genreCollectionTypes = genreCollectionTypes;
-	}
-
-	public GenreCollectionType addGenreCollectionType(GenreCollectionType genreCollectionType) {
-		getGenreCollectionTypes().add(genreCollectionType);
-		genreCollectionType.setGenre(this);
-
-		return genreCollectionType;
-	}
-
-	public GenreCollectionType removeGenreCollectionType(GenreCollectionType genreCollectionType) {
-		getGenreCollectionTypes().remove(genreCollectionType);
-		genreCollectionType.setGenre(null);
-
-		return genreCollectionType;
 	}
 
 }

@@ -3,7 +3,10 @@ package pl.wsb.collection.model;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -11,8 +14,7 @@ import java.util.List;
  * 
  */
 @Entity
-@Table(name="user_account")
-@NamedQuery(name="UserAccount.findAll", query="SELECT u FROM UserAccount u")
+@Table(name="user_account", catalog = "collection_management", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class UserAccount implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -21,11 +23,12 @@ public class UserAccount implements Serializable {
 	@Column(unique=true, nullable=false)
 	private int id;
 
-	private Timestamp created;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date created;
 
 	private int deleted;
 
-	@Column(nullable=false, length=255)
+	@Column(unique = true, nullable=false, length=255)
 	private String email;
 
 	@Column(name="first_name", nullable=false, length=255)
@@ -34,8 +37,9 @@ public class UserAccount implements Serializable {
 	@Column(name="last_name", nullable=false, length=255)
 	private String lastName;
 
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable=false)
-	private Timestamp modified;
+	private Date modified;
 
 	@Column(name="pass_hash", nullable=false, length=255)
 	private String passHash;
@@ -44,18 +48,47 @@ public class UserAccount implements Serializable {
 	private String passSalt;
 
 	//bi-directional many-to-one association to ApiToken
-	@OneToMany(mappedBy="userAccount")
-	private List<ApiToken> apiTokens;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy="userAccount")
+	private Set<ApiToken> apiTokens = new HashSet<>(0);
 
 	//bi-directional many-to-one association to CollectionLibrary
-	@OneToMany(mappedBy="userAccount")
-	private List<CollectionLibrary> collectionLibraries;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy="userAccount")
+	private Set<CollectionLibrary> collectionLibraries = new HashSet<>(0);
 
 	//bi-directional many-to-one association to UserAccountRole
-	@OneToMany(mappedBy="userAccount")
-	private List<UserAccountRole> userAccountRoles;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy="userAccount")
+	private Set<UserAccountRole> userAccountRoles = new HashSet<>(0);
 
 	public UserAccount() {
+	}
+
+	public UserAccount(Date modified, String email, String passHash, String passSalt) {
+		this.modified = modified;
+		this.email = email;
+		this.passHash = passHash;
+		this.passSalt = passSalt;
+	}
+
+	public UserAccount(Date modified, String firstName, String lastName) {
+		this.modified = modified;
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
+
+
+	public UserAccount(Date created, Date modified, String email, String firstName, String lastName, String passHash, String passSalt, Integer deleted,
+					   Set<CollectionLibrary> collectionLibraries,Set<UserAccountRole> userAccountRoles, Set<ApiToken> apiTokens) {
+		this.created = created;
+		this.modified = modified;
+		this.email = email;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.passHash = passHash;
+		this.passSalt = passSalt;
+		this.deleted = deleted;
+		this.collectionLibraries = collectionLibraries;
+		this.userAccountRoles = userAccountRoles;
+		this.apiTokens = apiTokens;
 	}
 
 	public int getId() {
@@ -66,11 +99,11 @@ public class UserAccount implements Serializable {
 		this.id = id;
 	}
 
-	public Timestamp getCreated() {
+	public Date getCreated() {
 		return this.created;
 	}
 
-	public void setCreated(Timestamp created) {
+	public void setCreated(Date created) {
 		this.created = created;
 	}
 
@@ -106,11 +139,11 @@ public class UserAccount implements Serializable {
 		this.lastName = lastName;
 	}
 
-	public Timestamp getModified() {
+	public Date getModified() {
 		return this.modified;
 	}
 
-	public void setModified(Timestamp modified) {
+	public void setModified(Date modified) {
 		this.modified = modified;
 	}
 
@@ -130,70 +163,29 @@ public class UserAccount implements Serializable {
 		this.passSalt = passSalt;
 	}
 
-	public List<ApiToken> getApiTokens() {
+	public Set<ApiToken> getApiTokens() {
 		return this.apiTokens;
 	}
 
-	public void setApiTokens(List<ApiToken> apiTokens) {
+	public void setApiTokens(Set<ApiToken> apiTokens) {
 		this.apiTokens = apiTokens;
 	}
 
-	public ApiToken addApiToken(ApiToken apiToken) {
-		getApiTokens().add(apiToken);
-		apiToken.setUserAccount(this);
-
-		return apiToken;
-	}
-
-	public ApiToken removeApiToken(ApiToken apiToken) {
-		getApiTokens().remove(apiToken);
-		apiToken.setUserAccount(null);
-
-		return apiToken;
-	}
-
-	public List<CollectionLibrary> getCollectionLibraries() {
+	public Set<CollectionLibrary> getCollectionLibraries() {
 		return this.collectionLibraries;
 	}
 
-	public void setCollectionLibraries(List<CollectionLibrary> collectionLibraries) {
+	public void setCollectionLibraries(Set<CollectionLibrary> collectionLibraries) {
 		this.collectionLibraries = collectionLibraries;
 	}
 
-	public CollectionLibrary addCollectionLibrary(CollectionLibrary collectionLibrary) {
-		getCollectionLibraries().add(collectionLibrary);
-		collectionLibrary.setUserAccount(this);
-
-		return collectionLibrary;
-	}
-
-	public CollectionLibrary removeCollectionLibrary(CollectionLibrary collectionLibrary) {
-		getCollectionLibraries().remove(collectionLibrary);
-		collectionLibrary.setUserAccount(null);
-
-		return collectionLibrary;
-	}
-
-	public List<UserAccountRole> getUserAccountRoles() {
+	public Set<UserAccountRole> getUserAccountRoles() {
 		return this.userAccountRoles;
 	}
 
-	public void setUserAccountRoles(List<UserAccountRole> userAccountRoles) {
+	public void setUserAccountRoles(Set<UserAccountRole> userAccountRoles) {
 		this.userAccountRoles = userAccountRoles;
 	}
 
-	public UserAccountRole addUserAccountRole(UserAccountRole userAccountRole) {
-		getUserAccountRoles().add(userAccountRole);
-		userAccountRole.setUserAccount(this);
-
-		return userAccountRole;
-	}
-
-	public UserAccountRole removeUserAccountRole(UserAccountRole userAccountRole) {
-		getUserAccountRoles().remove(userAccountRole);
-		userAccountRole.setUserAccount(null);
-
-		return userAccountRole;
-	}
 
 }

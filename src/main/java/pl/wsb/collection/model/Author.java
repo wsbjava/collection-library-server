@@ -3,7 +3,10 @@ package pl.wsb.collection.model;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -11,8 +14,7 @@ import java.util.List;
  * 
  */
 @Entity
-@Table(name="author")
-@NamedQuery(name="Author.findAll", query="SELECT a FROM Author a")
+@Table(name="author", catalog = "collection_management")
 public class Author implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -21,7 +23,8 @@ public class Author implements Serializable {
 	@Column(unique=true, nullable=false)
 	private int id;
 
-	private Timestamp created;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date created;
 
 	private int deleted;
 
@@ -32,13 +35,30 @@ public class Author implements Serializable {
 	private String lastName;
 
 	@Column(nullable=false)
-	private Timestamp modified;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date modified;
 
 	//bi-directional many-to-one association to CollectionEntryAuthor
-	@OneToMany(mappedBy="author")
-	private List<CollectionEntryAuthor> collectionEntryAuthors;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy="author")
+	private Set<CollectionEntryAuthor> collectionEntryAuthors = new HashSet<>(0);
 
 	public Author() {
+	}
+
+	public Author(Date modified)
+	{
+		this.modified = modified;
+	}
+
+	public Author(Date created, Date modified, String firstName, String lastName, Integer deleted, Set<CollectionEntryAuthor> collectionEntryAuthors)
+	{
+		this.created = created;
+		this.modified = modified;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.deleted = deleted;
+		this.collectionEntryAuthors = collectionEntryAuthors;
+
 	}
 
 	public int getId() {
@@ -49,11 +69,11 @@ public class Author implements Serializable {
 		this.id = id;
 	}
 
-	public Timestamp getCreated() {
+	public Date getCreated() {
 		return this.created;
 	}
 
-	public void setCreated(Timestamp created) {
+	public void setCreated(Date created) {
 		this.created = created;
 	}
 
@@ -81,34 +101,19 @@ public class Author implements Serializable {
 		this.lastName = lastName;
 	}
 
-	public Timestamp getModified() {
+	public Date getModified() {
 		return this.modified;
 	}
 
-	public void setModified(Timestamp modified) {
+	public void setModified(Date modified) {
 		this.modified = modified;
 	}
 
-	public List<CollectionEntryAuthor> getCollectionEntryAuthors() {
+	public Set<CollectionEntryAuthor> getCollectionEntryAuthors(){
 		return this.collectionEntryAuthors;
 	}
-
-	public void setCollectionEntryAuthors(List<CollectionEntryAuthor> collectionEntryAuthors) {
+	public void setCollectionEntryAuthors(Set<CollectionEntryAuthor> collectionEntryAuthors){
 		this.collectionEntryAuthors = collectionEntryAuthors;
-	}
-
-	public CollectionEntryAuthor addCollectionEntryAuthor(CollectionEntryAuthor collectionEntryAuthor) {
-		getCollectionEntryAuthors().add(collectionEntryAuthor);
-		collectionEntryAuthor.setAuthor(this);
-
-		return collectionEntryAuthor;
-	}
-
-	public CollectionEntryAuthor removeCollectionEntryAuthor(CollectionEntryAuthor collectionEntryAuthor) {
-		getCollectionEntryAuthors().remove(collectionEntryAuthor);
-		collectionEntryAuthor.setAuthor(null);
-
-		return collectionEntryAuthor;
 	}
 
 }

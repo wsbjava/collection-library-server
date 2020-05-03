@@ -3,7 +3,10 @@ package pl.wsb.collection.model;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -11,8 +14,7 @@ import java.util.List;
  * 
  */
 @Entity
-@Table(name="collection_entry")
-@NamedQuery(name="CollectionEntry.findAll", query="SELECT c FROM CollectionEntry c")
+@Table(name="collection_entry", catalog = "collection_management")
 public class CollectionEntry implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -21,12 +23,14 @@ public class CollectionEntry implements Serializable {
 	@Column(unique=true, nullable=false)
 	private int id;
 
-	private Timestamp created;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date created;
 
 	private int deleted;
 
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable=false)
-	private Timestamp modified;
+	private Date modified;
 
 	private int quantity;
 
@@ -47,22 +51,44 @@ public class CollectionEntry implements Serializable {
 	private CollectionType collectionType;
 
 	//bi-directional many-to-one association to CollectionEntryAuthor
-	@OneToMany(mappedBy="collectionEntry")
-	private List<CollectionEntryAuthor> collectionEntryAuthors;
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="collectionEntry")
+	private Set<CollectionEntryAuthor> collectionEntryAuthors = new HashSet<>(0);
 
 	//bi-directional many-to-one association to CollectionEntryGenre
-	@OneToMany(mappedBy="collectionEntry")
-	private List<CollectionEntryGenre> collectionEntryGenres;
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="collectionEntry")
+	private Set<CollectionEntryGenre> collectionEntryGenres = new HashSet<>(0);
 
 	//bi-directional many-to-one association to CollectionEntryPublisher
-	@OneToMany(mappedBy="collectionEntry")
-	private List<CollectionEntryPublisher> collectionEntryPublishers;
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="collectionEntry")
+	private Set<CollectionEntryPublisher> collectionEntryPublishers = new HashSet<>(0);
 
 	//bi-directional many-to-one association to CollectionLibrary
-	@OneToMany(mappedBy="collectionEntry")
-	private List<CollectionLibrary> collectionLibraries;
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="collectionEntry")
+	private Set<CollectionLibrary> collectionLibraries = new HashSet<>(0);
 
 	public CollectionEntry() {
+	}
+
+	public CollectionEntry(Date modified){
+		this.modified = modified;
+	}
+
+	public CollectionEntry(Date created, int deleted, Date modified, int quantity, int releaseYear, String title,
+						   CollectionRequestStatus collectionRequestStatus, CollectionType collectionType, Set<CollectionEntryAuthor> collectionEntryAuthors,
+						   Set<CollectionEntryGenre> collectionEntryGenres, Set<CollectionEntryPublisher> collectionEntryPublishers, Set<CollectionLibrary> collectionLibraries){
+
+		this.created = created;
+		this.deleted = deleted;
+		this.modified = modified;
+		this.quantity = quantity;
+		this.releaseYear = releaseYear;
+		this.title = title;
+		this.collectionRequestStatus = collectionRequestStatus;
+		this.collectionType = collectionType;
+		this.collectionEntryAuthors = collectionEntryAuthors;
+		this.collectionEntryGenres = collectionEntryGenres;
+		this.collectionEntryPublishers = collectionEntryPublishers;
+		this.collectionLibraries = collectionLibraries;
 	}
 
 	public int getId() {
@@ -73,11 +99,11 @@ public class CollectionEntry implements Serializable {
 		this.id = id;
 	}
 
-	public Timestamp getCreated() {
+	public Date getCreated() {
 		return this.created;
 	}
 
-	public void setCreated(Timestamp created) {
+	public void setCreated(Date created) {
 		this.created = created;
 	}
 
@@ -89,11 +115,11 @@ public class CollectionEntry implements Serializable {
 		this.deleted = deleted;
 	}
 
-	public Timestamp getModified() {
+	public Date getModified() {
 		return this.modified;
 	}
 
-	public void setModified(Timestamp modified) {
+	public void setModified(Date modified) {
 		this.modified = modified;
 	}
 
@@ -137,92 +163,38 @@ public class CollectionEntry implements Serializable {
 		this.collectionType = collectionType;
 	}
 
-	public List<CollectionEntryAuthor> getCollectionEntryAuthors() {
+	public Set<CollectionEntryAuthor> getCollectionEntryAuthors() {
 		return this.collectionEntryAuthors;
 	}
 
-	public void setCollectionEntryAuthors(List<CollectionEntryAuthor> collectionEntryAuthors) {
+	public void setCollectionEntryAuthors(Set<CollectionEntryAuthor> collectionEntryAuthors) {
 		this.collectionEntryAuthors = collectionEntryAuthors;
 	}
 
-	public CollectionEntryAuthor addCollectionEntryAuthor(CollectionEntryAuthor collectionEntryAuthor) {
-		getCollectionEntryAuthors().add(collectionEntryAuthor);
-		collectionEntryAuthor.setCollectionEntry(this);
 
-		return collectionEntryAuthor;
-	}
-
-	public CollectionEntryAuthor removeCollectionEntryAuthor(CollectionEntryAuthor collectionEntryAuthor) {
-		getCollectionEntryAuthors().remove(collectionEntryAuthor);
-		collectionEntryAuthor.setCollectionEntry(null);
-
-		return collectionEntryAuthor;
-	}
-
-	public List<CollectionEntryGenre> getCollectionEntryGenres() {
+	public Set<CollectionEntryGenre> getCollectionEntryGenres() {
 		return this.collectionEntryGenres;
 	}
 
-	public void setCollectionEntryGenres(List<CollectionEntryGenre> collectionEntryGenres) {
+	public void setCollectionEntryGenres(Set<CollectionEntryGenre> collectionEntryGenres) {
 		this.collectionEntryGenres = collectionEntryGenres;
 	}
-
-	public CollectionEntryGenre addCollectionEntryGenre(CollectionEntryGenre collectionEntryGenre) {
-		getCollectionEntryGenres().add(collectionEntryGenre);
-		collectionEntryGenre.setCollectionEntry(this);
-
-		return collectionEntryGenre;
-	}
-
-	public CollectionEntryGenre removeCollectionEntryGenre(CollectionEntryGenre collectionEntryGenre) {
-		getCollectionEntryGenres().remove(collectionEntryGenre);
-		collectionEntryGenre.setCollectionEntry(null);
-
-		return collectionEntryGenre;
-	}
-
-	public List<CollectionEntryPublisher> getCollectionEntryPublishers() {
+	public Set<CollectionEntryPublisher> getCollectionEntryPublishers() {
 		return this.collectionEntryPublishers;
 	}
 
-	public void setCollectionEntryPublishers(List<CollectionEntryPublisher> collectionEntryPublishers) {
+	public void setCollectionEntryPublishers(Set<CollectionEntryPublisher> collectionEntryPublishers) {
 		this.collectionEntryPublishers = collectionEntryPublishers;
 	}
 
-	public CollectionEntryPublisher addCollectionEntryPublisher(CollectionEntryPublisher collectionEntryPublisher) {
-		getCollectionEntryPublishers().add(collectionEntryPublisher);
-		collectionEntryPublisher.setCollectionEntry(this);
 
-		return collectionEntryPublisher;
-	}
-
-	public CollectionEntryPublisher removeCollectionEntryPublisher(CollectionEntryPublisher collectionEntryPublisher) {
-		getCollectionEntryPublishers().remove(collectionEntryPublisher);
-		collectionEntryPublisher.setCollectionEntry(null);
-
-		return collectionEntryPublisher;
-	}
-
-	public List<CollectionLibrary> getCollectionLibraries() {
+	public Set<CollectionLibrary> getCollectionLibraries() {
 		return this.collectionLibraries;
 	}
 
-	public void setCollectionLibraries(List<CollectionLibrary> collectionLibraries) {
+	public void setCollectionLibraries(Set<CollectionLibrary> collectionLibraries) {
 		this.collectionLibraries = collectionLibraries;
 	}
 
-	public CollectionLibrary addCollectionLibrary(CollectionLibrary collectionLibrary) {
-		getCollectionLibraries().add(collectionLibrary);
-		collectionLibrary.setCollectionEntry(this);
-
-		return collectionLibrary;
-	}
-
-	public CollectionLibrary removeCollectionLibrary(CollectionLibrary collectionLibrary) {
-		getCollectionLibraries().remove(collectionLibrary);
-		collectionLibrary.setCollectionEntry(null);
-
-		return collectionLibrary;
-	}
 
 }
