@@ -1,8 +1,13 @@
 package pl.wsb.collection.repository.impl;
 
 import com.google.protobuf.Api;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.codehaus.plexus.util.StringUtils;
+import pl.wsb.collection.exceptions.ApiException;
 import pl.wsb.collection.model.ApiToken;
+import pl.wsb.collection.model.UserAccount;
 import pl.wsb.collection.repository.AbstractRepository;
 import pl.wsb.collection.repository.EntityManagerHelper;
 
@@ -41,6 +46,7 @@ public class ApiTokenRepository extends AbstractRepository<ApiToken, Integer> {
                 )
         );
 
+
         List<ApiToken> results = EntityManagerHelper.entityManager().createQuery(criteriaQuery).getResultList();
 
         if(results == null){
@@ -52,6 +58,35 @@ public class ApiTokenRepository extends AbstractRepository<ApiToken, Integer> {
         }
 
         return  results.get(0);
+
+    }
+
+    public ApiToken generateApiToken(UserAccount userAccount) throws ApiException{
+        if(userAccount == null){
+            throw new ApiException("Undefined user account ...");
+        }
+
+        ApiToken apiToken = new ApiToken();
+        apiToken.setCreated(new Date());
+        apiToken.setModified(new Date());
+        apiToken.setAccessToken(
+                DigestUtils.sha256Hex(
+                        RandomStringUtils.randomAlphanumeric(255)
+                )
+        );
+        apiToken.setRefreshToken(
+                DigestUtils.sha256Hex(
+                        RandomStringUtils.randomAlphanumeric(255)
+                )
+        );
+        apiToken.setUserAccount(userAccount);
+        apiToken.setValidTo(
+                DateUtils.addMinutes(new Date(), 30)
+        );
+        EntityManagerHelper.startTransaction();
+        this.merge(apiToken);
+        EntityManagerHelper.commitTransaction();
+        return apiToken;
 
     }
 }

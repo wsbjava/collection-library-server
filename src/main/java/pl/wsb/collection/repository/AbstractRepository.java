@@ -1,6 +1,7 @@
 package pl.wsb.collection.repository;
 
 import java.io.Serializable;
+import java.util.List;
 
 public abstract class AbstractRepository<T, ID extends Serializable> implements IRepository<T, ID> {
 
@@ -22,4 +23,16 @@ public abstract class AbstractRepository<T, ID extends Serializable> implements 
     }
 
     protected abstract Class<T> getPersistentClass();
+
+    protected T getFirstResultOrNull(List<T> results){
+        if(results == null){
+            return null;
+        }
+
+        if(results.isEmpty()){
+            return null;
+        }
+
+        return results.get(0);
+    }
 }

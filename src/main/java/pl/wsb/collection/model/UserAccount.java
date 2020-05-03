@@ -1,7 +1,12 @@
 package pl.wsb.collection.model;
 
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang.StringUtils;
+import pl.wsb.collection.exceptions.ValidationException;
+
 import java.io.Serializable;
 import javax.persistence.*;
+import javax.validation.Valid;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashSet;
@@ -187,5 +192,26 @@ public class UserAccount implements Serializable {
 		this.userAccountRoles = userAccountRoles;
 	}
 
+	public boolean validatePass(String password) throws ValidationException{
+		if(StringUtils.isBlank(password)){
+			return false;
+		}
+		return this.generatePassHash(password, this.passSalt).equalsIgnoreCase(this.passHash);
+	}
+
+	public String generatePassHash(String password, String salt) throws ValidationException{
+		if(StringUtils.isBlank(password)){
+			throw new ValidationException("Password is empty");
+		}
+
+		if(StringUtils.isBlank(salt)){
+			throw new ValidationException("Salt is empty");
+		}
+
+		return DigestUtils.sha256Hex(
+				String.format("%s%s", password, salt)
+		);
+
+	}
 
 }
