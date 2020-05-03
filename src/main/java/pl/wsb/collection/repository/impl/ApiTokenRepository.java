@@ -1,12 +1,57 @@
 package pl.wsb.collection.repository.impl;
 
+import com.google.protobuf.Api;
+import org.codehaus.plexus.util.StringUtils;
 import pl.wsb.collection.model.ApiToken;
 import pl.wsb.collection.repository.AbstractRepository;
+import pl.wsb.collection.repository.EntityManagerHelper;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import java.util.Date;
+import java.util.List;
 
 public class ApiTokenRepository extends AbstractRepository<ApiToken, Integer> {
 
     @Override
     protected Class<ApiToken> getPersistentClass() {
         return ApiToken.class;
+    }
+
+    public static ApiToken findByAccessToken(String token){
+        if(StringUtils.isBlank(token)){
+            return null;
+        }
+
+        //Pobieramy budulca zapytań
+        CriteriaBuilder criteriaBuilder = EntityManagerHelper.entityManager().getCriteriaBuilder();
+        //Tworzymy instancje zapytania na podstanie budulca zapytań i klasy z modelu
+        CriteriaQuery<ApiToken> criteriaQuery = criteriaBuilder.createQuery(ApiToken.class);
+        Root<ApiToken> tokens = criteriaQuery.from(ApiToken.class);
+
+        criteriaQuery.where(
+                criteriaBuilder.equal(
+                        criteriaBuilder.lower(tokens.<String>get("accessToken")),
+                        token.toLowerCase()
+                ),
+                criteriaBuilder.greaterThanOrEqualTo(
+                        tokens.<Date>get("validTo"),
+                        new Date()
+                )
+        );
+
+        List<ApiToken> results = EntityManagerHelper.entityManager().createQuery(criteriaQuery).getResultList();
+
+        if(results == null){
+            return null;
+        }
+
+        if(results.isEmpty()){
+            return null;
+        }
+
+        return  results.get(0);
+
     }
 }
