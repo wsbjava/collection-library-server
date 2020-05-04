@@ -8,6 +8,7 @@ import pl.wsb.collection.repository.EntityManagerHelper;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.List;
 
 public class RoleRepository extends AbstractRepository<Role, Integer> {
 
@@ -16,6 +17,15 @@ public class RoleRepository extends AbstractRepository<Role, Integer> {
         return Role.class;
     }
 
+    /**
+     *
+     * This methos is used to fetch from DB a Role object based on unique abbr value
+     *
+     * @param abbr - an uniqu role abbr name
+     *
+     * @return Role
+     *
+     */
     public Role findByAbbr(String abbr){
         if(StringUtils.isBlank(abbr)){
             return null;
@@ -35,6 +45,24 @@ public class RoleRepository extends AbstractRepository<Role, Integer> {
         );
 
         return this.getFirstResultOrNull(EntityManagerHelper.entityManager().createQuery(criteriaQuery).getResultList());
+    }
+
+    /**
+     *
+     * This method is returned to fetch from DB all available roles
+     *
+     * @param
+     *
+     * @return List<Role>
+     */
+    public List<Role> findAll(){
+        CriteriaBuilder criteriaBuilder = EntityManagerHelper.entityManager().getCriteriaBuilder();
+        CriteriaQuery<Role> criteriaQuery = criteriaBuilder.createQuery(Role.class);
+        Root<Role> roles = criteriaQuery.from(Role.class);
+
+        criteriaQuery.select(roles);
+
+        return EntityManagerHelper.entityManager().createQuery(criteriaQuery).getResultList();
     }
 }
 

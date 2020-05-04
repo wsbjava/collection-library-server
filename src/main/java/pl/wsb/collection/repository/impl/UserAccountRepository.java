@@ -5,6 +5,7 @@ import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 import pl.wsb.collection.exceptions.ValidationException;
+import pl.wsb.collection.model.Role;
 import pl.wsb.collection.model.UserAccount;
 import pl.wsb.collection.repository.AbstractRepository;
 import pl.wsb.collection.repository.EntityManagerHelper;
@@ -13,6 +14,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.Date;
+import java.util.List;
 
 public class UserAccountRepository extends AbstractRepository<UserAccount, Integer> {
 
@@ -21,6 +23,16 @@ public class UserAccountRepository extends AbstractRepository<UserAccount, Integ
         return UserAccount.class;
     }
 
+
+
+    /**
+     *
+     * This method is used to get user by e-mail address
+     *
+     * @param email - unique e-mail address
+     *
+     * @return UserAccount
+     */
     public UserAccount findByEmail(String email){
         if(StringUtils.isBlank(email)){
             return null;
@@ -41,6 +53,16 @@ public class UserAccountRepository extends AbstractRepository<UserAccount, Integ
         return this.getFirstResultOrNull(EntityManagerHelper.entityManager().createQuery(criteriaQuery).getResultList());
     }
 
+    /**
+     *
+     * With this method is available to add new User to the system
+     *
+     * @// TODO: 04.05.2020 dorobić aby możliwe było dodanie roli dla użytkownika
+     *
+     * @return UserAccount - object with User that was added to the system
+     *
+     * @throws ValidationException
+     */
     public UserAccount registerUser() throws ValidationException {
 
 
@@ -79,6 +101,23 @@ public class UserAccountRepository extends AbstractRepository<UserAccount, Integ
             throw new NotImplementedException("TO DO - dokończyć tą metodę");
         return userAccount;
 
+    }
+
+    /**
+     *
+     * With this method is available to get list of all users registered in system
+     *
+     * @return List<UserAccount>
+     *
+     */
+    protected List<UserAccount> findAll() {
+        CriteriaBuilder criteriaBuilder = EntityManagerHelper.entityManager().getCriteriaBuilder();
+        CriteriaQuery<UserAccount> criteriaQuery = criteriaBuilder.createQuery(UserAccount.class);
+        Root<UserAccount> root = criteriaQuery.from(UserAccount.class);
+
+        criteriaQuery.select(root);
+
+        return EntityManagerHelper.entityManager().createQuery(criteriaQuery).getResultList();
     }
 }
 

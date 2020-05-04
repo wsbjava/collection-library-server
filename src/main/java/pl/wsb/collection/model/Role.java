@@ -42,6 +42,10 @@ public class Role implements Serializable {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy="role")
 	private Set<UserAccountRole> userAccountRoles = new HashSet<>(0);
 
+	public Role(){
+	}
+
+
 	public Role(Date modified, String abbr) {
 		this.modified = modified;
 		this.abbr = abbr;

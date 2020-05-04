@@ -24,6 +24,16 @@ public class ApiTokenRepository extends AbstractRepository<ApiToken, Integer> {
         return ApiToken.class;
     }
 
+
+    /**
+     *
+     * Method that allow to get ApiToken object by requested Token
+     *
+     * @param token - requested Token
+     *
+     * @return ApiToken
+     *
+     */
     public static ApiToken findByAccessToken(String token){
         if(StringUtils.isBlank(token)){
             return null;
@@ -61,6 +71,17 @@ public class ApiTokenRepository extends AbstractRepository<ApiToken, Integer> {
 
     }
 
+    /**
+     *
+     * This method is used to generate new Token for the user
+     *
+     * @param userAccount - user for which it`s to be generated Token
+     *
+     * @return ApiToken
+     *
+     * @throws ApiException
+     *
+     */
     public ApiToken generateApiToken(UserAccount userAccount) throws ApiException{
         if(userAccount == null){
             throw new ApiException("Undefined user account ...");

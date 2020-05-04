@@ -59,6 +59,16 @@ public class AuthenticateFilter implements ContainerRequestFilter {
         }
     }
 
+    /**
+     *
+     * This method is validate Requested token
+     *
+     * @param accessToken - token to validate
+     *
+     * @return UserAccount
+     *
+     * @throws UnauthenticatedException
+     */
     private UserAccount validateToken(String accessToken) throws UnauthenticatedException
     {
         final int TOKEN_VALIDATION_MINUTES = 30;
