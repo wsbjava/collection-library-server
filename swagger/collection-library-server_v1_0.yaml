@@ -31,12 +31,37 @@ definitions:
       password:
         type: string
         description: User password
+      name:
+        type: string
+        description: User's name
+      surname:
+        type: string
+        description: User's surname
+      date_of_birth:
+        type: string
+        format: date
+        description: User's date of birth
     required:
       - email
       - password
+      - name
+      - surname
+      - date_of_birth
     example:
       email: 'uzytkownik@collection-library.pl'
       password: 'password'
+      name: 'name'
+      username: 'username'
+      date_of_birth: '12-12-1999'
+  Role:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Role id
+      function:
+        type: string
+        description: Role's function
   User:
     type: object
     properties:
@@ -46,12 +71,53 @@ definitions:
       email:
         type: string
         description: User email address
+      role:
+        type: array
+        items:
+          $ref: '#/definitions/Role'
     required:
       - id
       - email
     example:
       id: 1
       email: 'uzytkownik@collection-library.pl'
+      role:
+        - id: 1
+          function: dodawanie
+  Item:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Item id
+      title:
+        type: string
+      author:
+        type: string
+      date_of_release:
+        type: string
+        format: date
+      publisher:
+        type: string
+      type:
+        type: string
+      genre:
+        type: string
+    required:
+      - title
+      - author
+      - date_of_release
+      - publisher
+      - type
+      - genre
+    example:
+      title: 'title'
+      author: 'Jan Kowalski'
+      date_of_release: '12-12-1996'
+      publisher: 'wydawca'
+      type: 'książka'
+      genre: 'fantasy'
+
 paths:
   /users:
     get:
