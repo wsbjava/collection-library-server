@@ -1,0 +1,64 @@
+swagger: "2.0"
+info:
+  title: collection-library-server-API
+  description: API for collection-library-server
+  version: 1.0.0
+host: api.collection-library-server.com
+schemes:
+  - https
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+definitions:
+  Error:
+   type: object
+   properties:
+      message:
+        type: string
+        description: Error message
+   required:
+    - message
+   example:
+      message: 'Sample error message.'
+  RegisterUserRequest:
+    type: object
+    properties:
+      email:
+        type: string
+        description: User email address
+      password:
+        type: string
+        description: User password
+    required:
+      - email
+      - password
+    example:
+      email: 'uzytkownik@collection-library.pl'
+      password: 'password'
+  User:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: User id
+      email:
+        type: string
+        description: User email address
+    required:
+      - id
+      - email
+    example:
+      id: 1
+      email: 'uzytkownik@collection-library.pl'
+paths:
+  /users:
+    get:
+      summary: Returns a list of users.
+      description: Optional extended description in Markdown.
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
