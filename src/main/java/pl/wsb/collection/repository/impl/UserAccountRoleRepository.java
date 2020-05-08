@@ -34,5 +34,24 @@ public class UserAccountRoleRepository extends AbstractRepository<UserAccountRol
         this.merge(userAccountRole);
         EntityManagerHelper.commitTransaction();
     }
+
+    public void unAssingUserToRole(UserAccount userAccount, Role role) throws ValidationException{
+        if(role == null){
+            throw new ValidationException("Please provide a role");
+        }
+
+        if(userAccount == null){
+            throw new ValidationException("Please provide a user");
+        }
+
+        for(UserAccountRole userAccountRole : userAccount.getUserAccountRoles()){
+            if(userAccountRole.getRole() == role){
+                EntityManagerHelper.startTransaction();
+                this.delete(userAccountRole);
+                EntityManagerHelper.commitTransaction();
+            }
+        }
+    }
+
 }
 

@@ -82,7 +82,6 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>${junit.jupiter.vesrion}</version>
-            <scope>test</scope>
         </dependency>
         <!-- uncomment this to get JSON support
         <dependency>
