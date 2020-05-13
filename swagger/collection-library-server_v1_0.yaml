@@ -53,6 +53,19 @@ definitions:
       name: 'name'
       username: 'username'
       date_of_birth: '12-12-1999'
+  AuthenticationRequest:
+    type: object
+    properties:
+      e-mail:
+        type: string
+      password:
+        type: string
+    required:
+      - e-mail
+      - password
+    example:
+      e-mail: 'uzytkownik@collection-library.pl'
+      password: 'password'
   Role:
     type: object
     properties:
@@ -83,7 +96,19 @@ definitions:
       email: 'uzytkownik@collection-library.pl'
       role:
         - id: 1
-          function: dodawanie
+          function: 'dodawanie'
+  Author:
+    type: object
+    properties:
+      id:
+        type: integer
+      first_name:
+        type: string
+      last_name:
+        type: string
+    required:
+      - first_name
+      - last_name
   Item:
     type: object
     properties:
@@ -93,7 +118,7 @@ definitions:
       title:
         type: string
       author:
-        type: string
+        $ref: '#/definitions/Author'
       date_of_release:
         type: string
         format: date
@@ -117,14 +142,117 @@ definitions:
       publisher: 'wydawca'
       type: 'książka'
       genre: 'fantasy'
+  ModifyRole:
+    type: object
+    properties:
+      user_id:
+        type: integer
+        description: User's id
+      role_id:
+        type: integer
+        description: Role's id
+      function:
+        type: string
+        enum:
+          - 'add'
+          - 'delete'
+    required:
+      - user_id
+      - role_id
+      - function
+    example:
+      user_id: 1
+      role_id: 1
+      function: 'delete'
+  ItemList:
+    type: object
+    properties:
+      total:
+        type: integer
+        description: Size of the data
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/Item'
+        description: One pagination page data
+
 
 paths:
   /users:
-    get:
-      summary: Returns a list of users.
-      description: Optional extended description in Markdown.
+    post:
+      summary: Register user.
+      operationId: newUser
+      description: Registration of a new user.
       produces:
         - application/json
+      consumes:
+        - application/json
+      parameters:
+        - description: New user data
+          in: body
+          name: body
+          schema:
+            $ref: '#/definitions/RegisterUserRequest'
       responses:
         200:
           description: OK
+          schema:
+            $ref: '#/definitions/User'
+
+  /authenticate:
+    post:
+      summary: Authenticate user
+      operationId: authUser
+      description: Authentication of existing user
+      produces:
+        - application/json
+      consumes:
+          - application/json
+      parameters:
+        - description: Authentication passes
+          in: body
+          name: body
+          schema:
+           $ref: '#/definitions/AuthenticationRequest'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/User'
+  /collection:
+    get:
+      summary: Retrieve data about whole collection
+      operationId: getCollection
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - description: Number of records to return
+          in: query
+          name: limit
+          required: true
+          type: integer
+        - description: Initial index
+          in: query
+          name: offset
+          required: true
+          type: integer
+        - description: Phrases to search
+          name: phrases
+          in: query
+          required: true
+          type: array
+      responses:
+        200:
+          description: Collection list
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ItemList'
+
+
+
+
+
+
