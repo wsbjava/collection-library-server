@@ -78,6 +78,9 @@ definitions:
     required:
       - id
       - function
+    example:
+      id: 1
+      function: 'Sample Role'
   User:
     type: object
     properties:
@@ -96,10 +99,32 @@ definitions:
       - email
     example:
       id: 1
-      email: 'uzytkownik@collection-library.pl'
+      email: 'user@collection-library.pl'
       role:
         - id: 1
-          function: 'dodawanie'
+          function: 'Sample role'
+  ModifyRole:
+    type: object
+    properties:
+      user_id:
+        type: integer
+        description: User's id
+      role_id:
+        type: integer
+        description: Role's id
+      function:
+        type: string
+        enum:
+          - 'add'
+          - 'delete'
+    required:
+      - user_id
+      - role_id
+      - function
+    example:
+      user_id: 1
+      role_id: 1
+      function: 'Sample function'
   Author:
     type: object
     properties:
@@ -112,10 +137,13 @@ definitions:
     required:
       - first_name
       - last_name
+    example:
+      id: 1
+      first_name: 'John'
+      last_name: 'Smith'
   AuthorRequest:
     type: object
     properties:
-
       first_name:
         type: string
       last_name:
@@ -123,6 +151,9 @@ definitions:
     required:
       - first_name
       - last_name
+    example:
+      first_name: 'John'
+      last_name: 'Smith'
   Item:
     type: object
     properties:
@@ -150,13 +181,13 @@ definitions:
       - type
       - genre
     example:
+      id: 1
       title: 'title'
       author: 'Jan Kowalski'
       date_of_release: '12-12-1996'
       publisher: 'wydawca'
       type: 'książka'
       genre: 'fantasy'
-
   ItemRequest:
     type: object
     properties:
@@ -187,29 +218,6 @@ definitions:
       publisher: 'wydawca'
       type: 'książka'
       genre: 'fantasy'
-
-  ModifyRole:
-    type: object
-    properties:
-      user_id:
-        type: integer
-        description: User's id
-      role_id:
-        type: integer
-        description: Role's id
-      function:
-        type: string
-        enum:
-          - 'add'
-          - 'delete'
-    required:
-      - user_id
-      - role_id
-      - function
-    example:
-      user_id: 1
-      role_id: 1
-      function: 'delete'
   ItemList:
     type: object
     properties:
@@ -221,6 +229,27 @@ definitions:
         items:
           $ref: '#/definitions/Item'
         description: One pagination page data
+    required:
+      - total
+      - data
+    example:
+      total: 99
+      data:
+        - id: 1
+          title: 'title'
+          author: 'Jan Kowalski'
+          date_of_release: '12-12-1996'
+          publisher: 'wydawca'
+          type: 'książka'
+          genre: 'fantasy'
+        - id: 1
+          title: 'title'
+          author: 'Jan Kowalski'
+          date_of_release: '12-12-1996'
+          publisher: 'wydawca'
+          type: 'książka'
+          genre: 'fantasy'
+
   CollectionLibraryRequest:
     type: object
     properties:
@@ -236,6 +265,9 @@ definitions:
     required:
       - item_id
       - shelf
+    example:
+      item_id: 1
+      shelf: 'Have'
   ItemRentalRequest:
     type: object
     properties:
@@ -248,9 +280,18 @@ definitions:
     required:
       - item_id
       - duration
+    example:
+      item_id: 1
+      duration: 10
   UserItemRental:
     type: object
     properties:
+      id:
+        type: integer
+        description: Rental id
+      user_id:
+        type: integer
+        description: User id
       item_id:
         type: integer
         description: Item to rent id
@@ -259,8 +300,15 @@ definitions:
         format: date
         description: Number of days for which item is rented
     required:
+      - id
+      - user_id
       - item_id
       - end
+    example:
+      id: 1
+      user_id: 1
+      item_id: 1
+      end: '12-12-1996'
   UserItemRentalList:
     type: object
     properties:
@@ -272,9 +320,27 @@ definitions:
         items:
           $ref: '#/definitions/UserItemRental'
         description: One pagination page data
+    required:
+      - total
+      - data
+    example:
+      total: 99
+      data:
+        - id: 1
+          user_id: 1
+          item_id: 1
+          end: '12-12-1996'
+        - id: 1
+          user_id: 1
+          item_id: 1
+          end: '12-12-1996'
+
   AdminToUserMessage:
     type: object
     properties:
+      id:
+        type: integer
+        description: Message id
       user_id:
         type: integer
         description: Target user id
@@ -284,16 +350,55 @@ definitions:
     required:
       - user_id
       - text
+    example:
+      id: 1
+      user_id: 1
+      text: 'Sample text'
+  MessagesList:
+    type: object
+    properties:
+      total:
+        type: integer
+        description: Size of the data
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/AdminToUserMessage'
+        description: One pagination page data
+    required:
+      - total
+      - data
+    example:
+      total: 99
+      data:
+        - id: 1
+          user_id: 1
+          text: 'Sample text'
+        - id: 1
+          user_id: 1
+          text: 'Sample text'
 
   Suggestion:
     type: object
     properties:
-      suggestion_id:
+      id:
         type: integer
         description: Id of the suggestion
       item_to_add:
         $ref: '#/definitions/ItemRequest'
         description: Data of item
+    required:
+      - id
+      - item_to_add
+    example:
+      id: 1
+      title: 'title'
+      author: 'Jan Kowalski'
+      date_of_release: '12-12-1996'
+      publisher: 'wydawca'
+      type: 'książka'
+      genre: 'fantasy'
+
   UserSuggestionList:
     type: object
     properties:
@@ -305,6 +410,27 @@ definitions:
         items:
           $ref: '#/definitions/Suggestion'
         description: One pagination page data
+    required:
+      - total
+      - data
+    example:
+      total: 99
+      data:
+        - id: 1
+          title: 'title'
+          author: 'Jan Kowalski'
+          date_of_release: '12-12-1996'
+          publisher: 'wydawca'
+          type: 'książka'
+          genre: 'fantasy'
+        - id: 1
+          title: 'title'
+          author: 'Jan Kowalski'
+          date_of_release: '12-12-1996'
+          publisher: 'wydawca'
+          type: 'książka'
+          genre: 'fantasy'
+
 paths:
   /users:
     post:
@@ -326,6 +452,15 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/User'
+        400:
+          description: Client error, e.g. unsufficient data
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: Server error, e.g. unexpected exception
+          schema:
+            $ref: '#/definitions/Error'
+
   /authenticate:
     post:
       summary: Authenticate user
@@ -346,16 +481,24 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/User'
-  /user/{id}/addrole:
+        400:
+          description: Client error, e.g. unsufficient data
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: Server error, e.g. unexpected exception
+          schema:
+            $ref: '#/definitions/Error'
+  /user/{id}/modifyRole:
     put:
-      summary: Add role to user.
-      operationId: addRole
+      summary: Modify role of user.
+      operationId: modifyRole
       consumes:
         - application/json
       produces:
         - application/json
       parameters:
-        - description: Add role to user
+        - description: Role modification
           in: path
           name: id
           required: true
@@ -365,33 +508,114 @@ paths:
           name: body
           required: true
           schema:
-            $ref: '#/definitions/Role'
+            $ref: '#/definitions/ModifyRole'
       responses:
         204:
           description: Success
-  /user/{id}/removerole:
-    put:
-      summary: Remove role from user.
-      operationId: removeRole
-      consumes:
-        - application/json
-      produces:
-        - application/json
+          schema:
+            $ref: '#/definitions/Role'
+        400:
+          description: Client error, e.g. unsufficient data
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Unauthorized error e.g. not priviliged
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: Server error, e.g. unexpected exception
+          schema:
+            $ref: '#/definitions/Error'
+  /user/message:
+    post:
+      summary: Send message to user.
+      operationId: messageSend
       parameters:
-        - description: Remove role from user
-          in: path
-          name: id
-          required: true
-          type: integer
-        - description: Role
+        - description: Target userId and text.
           in: body
           name: body
           required: true
           schema:
-            $ref: '#/definitions/Role'
+            $ref: '#/definitions/AdminToUserMessage'
       responses:
         204:
           description: Success
+          schema:
+            $ref: '#/definitions/User'
+        400:
+          description: Client error, e.g. unsufficient data
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: Server error, e.g. unexpected exception
+          schema:
+            $ref: '#/definitions/Error'
+    get:
+      summary: Retrieve data about whole messages
+      operationId: getMessages
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - description: Number of records to return
+          in: query
+          name: limit
+          required: true
+          type: integer
+        - description: Initial index
+          in: query
+          name: offset
+          required: true
+          type: integer
+        - description: Phrases to search
+          name: phrases
+          in: query
+          required: true
+          type: array
+      responses:
+        200:
+          description: Messages list
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/MessagesList'
+        400:
+          description: Client error, e.g. unsufficient data
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: Server error, e.g. unexpected exception
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Remove message
+      operationId: removeMessage
+      parameters:
+        - description: Remove message
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/AdminToUserMessage'
+      responses:
+        204:
+          description: Success
+          schema:
+            $ref: '#/definitions/Item'
+        400:
+          description: Client error, e.g. unsufficient data
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Unauthorized error e.g. not priviliged
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: Server error, e.g. unexpected exception
+          schema:
+            $ref: '#/definitions/Error'
+
 
   /collection:
     get:
@@ -424,6 +648,14 @@ paths:
             type: array
             items:
               $ref: '#/definitions/ItemList'
+        400:
+          description: Client error, e.g. unsufficient data
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: Server error, e.g. unexpected exception
+          schema:
+            $ref: '#/definitions/Error'
     post:
       summary: Add item of collection
       operationId: addItem
@@ -439,6 +671,41 @@ paths:
           description: Success
           schema:
             $ref: '#/definitions/Item'
+        400:
+          description: Client error, e.g. unsufficient data
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: Server error, e.g. unexpected exception
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Remove item from library.
+      operationId: removeItem
+      parameters:
+        - description: Remove item from library
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/Item'
+      responses:
+        204:
+          description: Success
+          schema:
+            $ref: '#/definitions/Item'
+        400:
+          description: Client error, e.g. unsufficient data
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Unauthorized error e.g. not priviliged
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: Server error, e.g. unexpected exception
+          schema:
+            $ref: '#/definitions/Error'
   /library:
     post:
       summary: Add item to library.
@@ -453,19 +720,17 @@ paths:
       responses:
         204:
           description: Success
-  /item/rentRequest:
-    post:
-      summary: Rent an item.
-      operationId: rentRequest
-        - description: Role
-          in: body
-          name: body
-          required: true
           schema:
-            $ref: '#/definitions/ItemRentalRequest'
-      responses:
-        204:
-          description: Success
+            $ref: '#/definitions/Item'
+        400:
+          description: Client error, e.g. unsufficient data
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: Server error, e.g. unexpected exception
+          schema:
+            $ref: '#/definitions/Error'
+
   /rentals:
     get:
       summary: Retrieve data about whole rentals
@@ -497,37 +762,37 @@ paths:
             type: array
             items:
               $ref: '#/definitions/UserItemRentalList'
-  /user/message:
-    post:
-      summary: Send message to user.
-      operationId: messageSend
-      parameters:
-        - description: Target userId and text.
-          in: body
-          name: body
-          required: true
+        400:
+          description: Client error, e.g. unsufficient data
           schema:
-            $ref: '#/definitions/AdminToUserMessage'
+            $ref: '#/definitions/Error'
+        500:
+          description: Server error, e.g. unexpected exception
+          schema:
+            $ref: '#/definitions/Error'
+  /item/rentRequest:
+    post:
+      summary: Rent an item.
+      operationId: rentRequest
+                     - description: Role
+                     in: body
+                     name: body
+                     required: true
+                     schema:
+                       $ref: '#/definitions/ItemRentalRequest'
       responses:
         204:
           description: Success
-  /item/{id}/remove:
-    delete:
-      summary: Remove item from library.
-      operationId: removeItem
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - description: Remove item from library
-          in: path
-          name: id
-          required: true
-          type: integer
-      responses:
-        204:
-          description: Success
+          schema:
+            $ref: '#/definitions/Item'
+        400:
+          description: Client error, e.g. unsufficient data
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: Server error, e.g. unexpected exception
+          schema:
+            $ref: '#/definitions/Error'
   /rental/{id}/accept:
     put:
       summary: Accept item rental.
@@ -545,6 +810,20 @@ paths:
       responses:
         204:
           description: Success
+          schema:
+            $ref: '#/definitions/User'
+        400:
+          description: Client error, e.g. unsufficient data
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Unauthorized error e.g. not priviliged
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: Server error, e.g. unexpected exception
+          schema:
+            $ref: '#/definitions/Error'
   /rental/{id}/reject:
     put:
       summary: Reject item rental.
@@ -562,6 +841,21 @@ paths:
       responses:
         204:
           description: Success
+          schema:
+            $ref: '#/definitions/User'
+        400:
+          description: Client error, e.g. unsufficient data
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Unauthorized error e.g. not priviliged
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: Server error, e.g. unexpected exception
+          schema:
+            $ref: '#/definitions/Error'
+
   /suggest:
     post:
       summary: Create suggestions.
@@ -576,6 +870,16 @@ paths:
       responses:
         204:
           description: Success
+          schema:
+            $ref: '#/definitions/Item'
+        400:
+          description: Client error, e.g. unsufficient data
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: Server error, e.g. unexpected exception
+          schema:
+            $ref: '#/definitions/Error'
   /suggestion/{id}/accept:
     put:
       summary: Accept suggestion.
@@ -610,6 +914,20 @@ paths:
       responses:
         204:
           description: Success
+          schema:
+            $ref: '#/definitions/Suggestion'
+        400:
+          description: Client error, e.g. unsufficient data
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Unauthorized error e.g. not priviliged
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: Server error, e.g. unexpected exception
+          schema:
+            $ref: '#/definitions/Error'
   /suggestion:
     get:
       summary: Retrieve data about whole suggestions
@@ -641,3 +959,15 @@ paths:
             type: array
             items:
               $ref: '#/definitions/UserSuggestionList'
+        400:
+          description: Client error, e.g. unsufficient data
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Unauthorized error e.g. not priviliged
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: Server error, e.g. unexpected exception
+          schema:
+            $ref: '#/definitions/Error'
