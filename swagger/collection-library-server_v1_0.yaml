@@ -572,7 +572,7 @@ paths:
           name: phrases
           in: query
           required: true
-          type: array
+          type: string
       responses:
         200:
           description: Messages list
@@ -640,7 +640,7 @@ paths:
           name: phrases
           in: query
           required: true
-          type: array
+          type: string
       responses:
         200:
           description: Collection list
@@ -754,7 +754,7 @@ paths:
           name: phrases
           in: query
           required: true
-          type: array
+          type: string
       responses:
         200:
           description: User rental list
@@ -774,12 +774,13 @@ paths:
     post:
       summary: Rent an item.
       operationId: rentRequest
-                     - description: Role
-                     in: body
-                     name: body
-                     required: true
-                     schema:
-                       $ref: '#/definitions/ItemRentalRequest'
+      parameters:
+        - description: Role
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/ItemRentalRequest'
       responses:
         204:
           description: Success
@@ -897,6 +898,20 @@ paths:
       responses:
         204:
           description: Success
+          schema:
+            $ref: '#/definitions/Suggestion'
+        400:
+          description: Client error, e.g. unsufficient data
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Unauthorized error e.g. not priviliged
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: Server error, e.g. unexpected exception
+          schema:
+            $ref: '#/definitions/Error'
   /suggestion/{id}/reject:
     put:
       summary: Reject suggestion.
@@ -951,7 +966,7 @@ paths:
           name: phrases
           in: query
           required: true
-          type: array
+          type: string
       responses:
         200:
           description: User suggestion list

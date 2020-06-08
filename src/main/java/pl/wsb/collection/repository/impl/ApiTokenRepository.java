@@ -1,13 +1,12 @@
 package pl.wsb.collection.repository.impl;
 
-import com.google.protobuf.Api;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.codehaus.plexus.util.StringUtils;
 import pl.wsb.collection.exceptions.ApiException;
-import pl.wsb.collection.model.ApiToken;
-import pl.wsb.collection.model.UserAccount;
+import pl.wsb.collection.hibernate.ApiToken;
+import pl.wsb.collection.hibernate.UserAccount;
 import pl.wsb.collection.repository.AbstractRepository;
 import pl.wsb.collection.repository.EntityManagerHelper;
 

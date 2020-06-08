@@ -1,7 +1,7 @@
 package pl.wsb.collection.repository.impl;
 
 import org.apache.commons.lang.StringUtils;
-import pl.wsb.collection.model.Role;
+import pl.wsb.collection.hibernate.Role;
 import pl.wsb.collection.repository.AbstractRepository;
 import pl.wsb.collection.repository.EntityManagerHelper;
 

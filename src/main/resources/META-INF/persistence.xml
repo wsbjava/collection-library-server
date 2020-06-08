@@ -6,22 +6,22 @@ http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
              version="2.1">
     <persistence-unit name="manager" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-        <class>pl.wsb.collection.model.ApiToken</class>
-        <class>pl.wsb.collection.model.Author</class>
-        <class>pl.wsb.collection.model.CollectionEntry</class>
-        <class>pl.wsb.collection.model.CollectionEntryAuthor</class>
-        <class>pl.wsb.collection.model.CollectionEntryGenre</class>
-        <class>pl.wsb.collection.model.CollectionEntryPublisher</class>
-        <class>pl.wsb.collection.model.CollectionLibrary</class>
-        <class>pl.wsb.collection.model.CollectionLibraryStatus</class>
-        <class>pl.wsb.collection.model.CollectionRequestStatus</class>
-        <class>pl.wsb.collection.model.CollectionType</class>
-        <class>pl.wsb.collection.model.Genre</class>
-        <class>pl.wsb.collection.model.GenreCollectionType</class>
-        <class>pl.wsb.collection.model.Publisher</class>
-        <class>pl.wsb.collection.model.Role</class>
-        <class>pl.wsb.collection.model.UserAccount</class>
-        <class>pl.wsb.collection.model.UserAccountRole</class>
+        <class>pl.wsb.collection.hibernate.ApiToken</class>
+        <class>pl.wsb.collection.hibernate.Author</class>
+        <class>pl.wsb.collection.hibernate.CollectionEntry</class>
+        <class>pl.wsb.collection.hibernate.CollectionEntryAuthor</class>
+        <class>pl.wsb.collection.hibernate.CollectionEntryGenre</class>
+        <class>pl.wsb.collection.hibernate.CollectionEntryPublisher</class>
+        <class>pl.wsb.collection.hibernate.CollectionLibrary</class>
+        <class>pl.wsb.collection.hibernate.CollectionLibraryStatus</class>
+        <class>pl.wsb.collection.hibernate.CollectionRequestStatus</class>
+        <class>pl.wsb.collection.hibernate.CollectionType</class>
+        <class>pl.wsb.collection.hibernate.Genre</class>
+        <class>pl.wsb.collection.hibernate.GenreCollectionType</class>
+        <class>pl.wsb.collection.hibernate.Publisher</class>
+        <class>pl.wsb.collection.hibernate.Role</class>
+        <class>pl.wsb.collection.hibernate.UserAccount</class>
+        <class>pl.wsb.collection.hibernate.UserAccountRole</class>
         <properties>
             <property name="javax.persistence.jdbc.driver"
                       value="com.mysql.cj.jdbc.Driver" />

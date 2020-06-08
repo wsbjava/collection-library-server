@@ -1,7 +1,7 @@
 package pl.wsb.collection.test.repository.impl;
 
 import org.junit.jupiter.api.Test;
-import pl.wsb.collection.model.Role;
+import pl.wsb.collection.hibernate.Role;
 import pl.wsb.collection.repository.impl.RoleRepository;
 
 import java.util.List;

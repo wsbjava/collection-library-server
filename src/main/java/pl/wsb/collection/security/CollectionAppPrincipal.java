@@ -1,6 +1,6 @@
 package pl.wsb.collection.security;
 
-import pl.wsb.collection.model.UserAccount;
+import pl.wsb.collection.hibernate.UserAccount;
 
 import java.security.Principal;
 

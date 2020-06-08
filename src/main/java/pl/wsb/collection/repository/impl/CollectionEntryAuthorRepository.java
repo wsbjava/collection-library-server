@@ -1,9 +1,9 @@
 package pl.wsb.collection.repository.impl;
 
 import pl.wsb.collection.exceptions.ValidationException;
-import pl.wsb.collection.model.Author;
-import pl.wsb.collection.model.CollectionEntry;
-import pl.wsb.collection.model.CollectionEntryAuthor;
+import pl.wsb.collection.hibernate.Author;
+import pl.wsb.collection.hibernate.CollectionEntry;
+import pl.wsb.collection.hibernate.CollectionEntryAuthor;
 import pl.wsb.collection.repository.AbstractRepository;
 import pl.wsb.collection.repository.EntityManagerHelper;
 

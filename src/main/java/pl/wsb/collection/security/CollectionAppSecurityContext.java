@@ -1,6 +1,6 @@
 package pl.wsb.collection.security;
 
-import pl.wsb.collection.model.UserAccount;
+import pl.wsb.collection.hibernate.UserAccount;
 
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;

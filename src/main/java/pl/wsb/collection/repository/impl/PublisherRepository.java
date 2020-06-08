@@ -1,14 +1,13 @@
 package pl.wsb.collection.repository.impl;
 
 import org.apache.commons.lang.StringUtils;
-import pl.wsb.collection.model.*;
+import pl.wsb.collection.hibernate.*;
 import pl.wsb.collection.repository.AbstractRepository;
 import pl.wsb.collection.repository.EntityManagerHelper;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import javax.ws.rs.core.SecurityContext;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;

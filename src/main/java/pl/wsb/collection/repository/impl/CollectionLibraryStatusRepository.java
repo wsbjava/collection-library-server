@@ -1,6 +1,6 @@
 package pl.wsb.collection.repository.impl;
 
-import pl.wsb.collection.model.CollectionLibraryStatus;
+import pl.wsb.collection.hibernate.CollectionLibraryStatus;
 import pl.wsb.collection.repository.AbstractRepository;
 
 

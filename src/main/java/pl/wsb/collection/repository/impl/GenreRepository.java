@@ -2,13 +2,12 @@ package pl.wsb.collection.repository.impl;
 
 import org.apache.commons.lang.StringUtils;
 import pl.wsb.collection.exceptions.ValidationException;
-import pl.wsb.collection.model.CollectionType;
-import pl.wsb.collection.model.Genre;
-import pl.wsb.collection.model.GenreCollectionType;
+import pl.wsb.collection.hibernate.CollectionType;
+import pl.wsb.collection.hibernate.Genre;
+import pl.wsb.collection.hibernate.GenreCollectionType;
 import pl.wsb.collection.repository.AbstractRepository;
 import pl.wsb.collection.repository.EntityManagerHelper;
 
-import javax.persistence.Query;
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;

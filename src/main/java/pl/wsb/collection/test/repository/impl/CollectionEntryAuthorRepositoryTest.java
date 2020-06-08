@@ -2,9 +2,8 @@ package pl.wsb.collection.test.repository.impl;
 
 import org.junit.jupiter.api.Test;
 import pl.wsb.collection.exceptions.ValidationException;
-import pl.wsb.collection.model.Author;
-import pl.wsb.collection.model.CollectionEntry;
-import pl.wsb.collection.model.CollectionEntryAuthor;
+import pl.wsb.collection.hibernate.Author;
+import pl.wsb.collection.hibernate.CollectionEntry;
 import pl.wsb.collection.repository.EntityManagerHelper;
 import pl.wsb.collection.repository.impl.CollectionEntryAuthorRepository;
 

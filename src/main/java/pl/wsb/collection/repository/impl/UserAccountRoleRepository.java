@@ -1,9 +1,9 @@
 package pl.wsb.collection.repository.impl;
 
 import pl.wsb.collection.exceptions.ValidationException;
-import pl.wsb.collection.model.Role;
-import pl.wsb.collection.model.UserAccount;
-import pl.wsb.collection.model.UserAccountRole;
+import pl.wsb.collection.hibernate.Role;
+import pl.wsb.collection.hibernate.UserAccount;
+import pl.wsb.collection.hibernate.UserAccountRole;
 import pl.wsb.collection.repository.AbstractRepository;
 import pl.wsb.collection.repository.EntityManagerHelper;
 

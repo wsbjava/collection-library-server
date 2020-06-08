@@ -1,6 +1,6 @@
 package pl.wsb.collection.repository.impl;
 
-import pl.wsb.collection.model.CollectionEntryGenre;
+import pl.wsb.collection.hibernate.CollectionEntryGenre;
 import pl.wsb.collection.repository.AbstractRepository;
 
 

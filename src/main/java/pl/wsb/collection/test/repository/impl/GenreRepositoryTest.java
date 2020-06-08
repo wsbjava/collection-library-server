@@ -2,8 +2,8 @@ package pl.wsb.collection.test.repository.impl;
 
 import org.junit.jupiter.api.Test;
 import pl.wsb.collection.exceptions.ValidationException;
-import pl.wsb.collection.model.CollectionType;
-import pl.wsb.collection.model.Genre;
+import pl.wsb.collection.hibernate.CollectionType;
+import pl.wsb.collection.hibernate.Genre;
 import pl.wsb.collection.repository.impl.CollectionTypeRepository;
 import pl.wsb.collection.repository.impl.GenreRepository;
 
