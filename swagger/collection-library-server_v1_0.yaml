@@ -110,7 +110,7 @@ definitions:
         type: integer
         description: User's id
       role_id:
-        type: integer
+        type : integer
         description: Role's id
       function:
         type: string

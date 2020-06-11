@@ -9,5 +9,8 @@
         <module name="collection-library-server" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="collection-library-desktop-client" target="1.5" />
+    </bytecodeTargetLevel>
   </component>
 </project>

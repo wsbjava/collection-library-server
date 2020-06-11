@@ -43,6 +43,10 @@ public class UserAccount implements Serializable {
 	@Column(nullable=false)
 	private Date modified;
 
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="date_of_birth", nullable=false)
+	private Date dateOfBirth;
+
 	@Column(name="pass_hash", nullable=false, length=255)
 	private String passHash;
 
@@ -57,9 +61,15 @@ public class UserAccount implements Serializable {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy="userAccount")
 	private Set<CollectionLibrary> collectionLibraries = new HashSet<>(0);
 
+	@OneToMany(mappedBy="userAccount")
+	private Set<Suggestion> suggestions;
+
 	//bi-directional many-to-one association to UserAccountRole
 	@OneToMany(fetch = FetchType.LAZY, mappedBy="userAccount")
 	private Set<UserAccountRole> userAccountRoles = new HashSet<>(0);
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy="userAccount")
+	private Set<UserMessageStatus> userMessageStatuses;
 
 	public UserAccount() {
 	}
@@ -78,10 +88,11 @@ public class UserAccount implements Serializable {
 	}
 
 
-	public UserAccount(Date created, Date modified, String email, String firstName, String lastName, String passHash, String passSalt, Integer deleted,
-					   Set<CollectionLibrary> collectionLibraries,Set<UserAccountRole> userAccountRoles, Set<ApiToken> apiTokens) {
+	public UserAccount(Date created, Date modified, String email, String firstName, String lastName, String passHash, String passSalt, Date dateOfBirth, Integer deleted,
+					   Set<CollectionLibrary> collectionLibraries,Set<UserAccountRole> userAccountRoles, Set<ApiToken> apiTokens, Set<UserMessageStatus> userMessageStatuses, Set<Suggestion> suggestions) {
 		this.created = created;
 		this.modified = modified;
+		this.dateOfBirth = dateOfBirth;
 		this.email = email;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -91,6 +102,8 @@ public class UserAccount implements Serializable {
 		this.collectionLibraries = collectionLibraries;
 		this.userAccountRoles = userAccountRoles;
 		this.apiTokens = apiTokens;
+		this.userMessageStatuses = userMessageStatuses;
+		this.suggestions = suggestions;
 	}
 
 	public int getId() {
@@ -108,6 +121,10 @@ public class UserAccount implements Serializable {
 	public void setCreated(Date created) {
 		this.created = created;
 	}
+
+	public Date getDateOfBirth() {return this.dateOfBirth;}
+
+	public void setDateOfBirth(Date dateOfBirth) { this.dateOfBirth = dateOfBirth;}
 
 	public int getDeleted() {
 		return this.deleted;
@@ -183,6 +200,24 @@ public class UserAccount implements Serializable {
 
 	public Set<UserAccountRole> getUserAccountRoles() {
 		return this.userAccountRoles;
+	}
+
+
+	public void setSuggestions(Set<Suggestion> suggestions) {
+		this.suggestions = suggestions;
+	}
+
+	public Set<Suggestion> getSuggestions() {
+		return this.suggestions;
+	}
+
+
+	public void setUserMessageStatuses(Set<UserMessageStatus> userMessageStatuses) {
+		this.userMessageStatuses = userMessageStatuses;
+	}
+
+	public Set<UserMessageStatus> getUserMessageStatuses() {
+		return this.userMessageStatuses;
 	}
 
 	public void setUserAccountRoles(Set<UserAccountRole> userAccountRoles) {

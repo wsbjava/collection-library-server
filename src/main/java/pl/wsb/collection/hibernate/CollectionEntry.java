@@ -64,6 +64,10 @@ public class CollectionEntry implements Serializable {
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="collectionEntry")
 	private Set<CollectionLibrary> collectionLibraries = new HashSet<>(0);
 
+	//bi-directional many-to-one association to Suggestion
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="collectionEntry")
+	private Set<Suggestion> suggestions;
+
 	public CollectionEntry() {
 	}
 
@@ -73,7 +77,8 @@ public class CollectionEntry implements Serializable {
 
 	public CollectionEntry(Date created, int deleted, Date modified, int quantity, int releaseYear, String title,
 						   CollectionRequestStatus collectionRequestStatus, CollectionType collectionType, Set<CollectionEntryAuthor> collectionEntryAuthors,
-						   Set<CollectionEntryGenre> collectionEntryGenres, Set<CollectionEntryPublisher> collectionEntryPublishers, Set<CollectionLibrary> collectionLibraries){
+						   Set<CollectionEntryGenre> collectionEntryGenres, Set<CollectionEntryPublisher> collectionEntryPublishers, Set<CollectionLibrary> collectionLibraries,
+						   Set<Suggestion> suggestions){
 
 		this.created = created;
 		this.deleted = deleted;
@@ -87,6 +92,7 @@ public class CollectionEntry implements Serializable {
 		this.collectionEntryGenres = collectionEntryGenres;
 		this.collectionEntryPublishers = collectionEntryPublishers;
 		this.collectionLibraries = collectionLibraries;
+		this.suggestions = suggestions;
 	}
 
 	public int getId() {
@@ -192,6 +198,14 @@ public class CollectionEntry implements Serializable {
 
 	public void setCollectionLibraries(Set<CollectionLibrary> collectionLibraries) {
 		this.collectionLibraries = collectionLibraries;
+	}
+
+	public Set<Suggestion> getSuggestions() {
+		return this.suggestions;
+	}
+
+	public void setSuggestions(Set<Suggestion> suggestions) {
+		this.suggestions = suggestions;
 	}
 
 
