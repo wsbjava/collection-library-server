@@ -66,6 +66,28 @@ definitions:
     example:
       e-mail: 'uzytkownik@collection-library.pl'
       password: 'password'
+  AuthenticationResponse:
+    type: object
+    properties:
+      access_token:
+        type: string
+      expires_in:
+         type: integer
+      user_id:
+         type: integer
+      email_address:
+         type: string
+    required:
+      - access_token
+      - expires_in
+      - user_id
+      - email_address
+    example:
+     access_token: 'user_access_token'
+     expires_in: 1800
+     user_id: 1
+     user_mail: 'uzytkownik@java-course-wsb.pl'
+
   Role:
     type: object
     properties:
@@ -432,7 +454,7 @@ definitions:
           genre: 'fantasy'
 
 paths:
-  /users:
+  /user:
     post:
       summary: Register user.
       operationId: newUser
@@ -469,7 +491,7 @@ paths:
       produces:
         - application/json
       consumes:
-          - application/json
+        - application/json
       parameters:
         - description: Authentication passes
           in: body
@@ -480,7 +502,7 @@ paths:
         200:
           description: OK
           schema:
-            $ref: '#/definitions/User'
+            $ref: '#/definitions/AuthenticationResponse'
         400:
           description: Client error, e.g. unsufficient data
           schema:

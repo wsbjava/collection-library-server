@@ -18,6 +18,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import pl.wsb.collection.exceptions.ApiException;
+import pl.wsb.collection.hibernate.UserAccount;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.*;
@@ -35,6 +38,20 @@ public class User   {
 
   @JsonProperty("role")
   private List<Role> role = null;
+
+  public static User createFromUserAccount(UserAccount registerUser) throws ApiException {
+    if (registerUser == null) {
+      throw new ApiException("Token is null...");
+    }
+    if (registerUser.getEmail() == null) {
+      throw new ApiException("Token user information data is null...");
+    }
+
+    return new User()
+            .id(registerUser.getId())
+            .email(registerUser.getEmail());
+
+  }
 
   public User id(Integer id) {
     this.id = id;

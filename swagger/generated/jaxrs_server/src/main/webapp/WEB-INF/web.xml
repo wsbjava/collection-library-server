@@ -22,6 +22,11 @@
             <param-name>jersey.config.server.wadl.disableWadl</param-name>
             <param-value>true</param-value>
         </init-param>
+
+        <init-param>
+            <param-name>javax.ws.rs.Application</param-name>
+            <param-value>pl.wsb.students.main.ServerConfig</param-value>
+        </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
 

@@ -6,6 +6,7 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 import pl.wsb.collection.exceptions.ValidationException;
 import pl.wsb.collection.hibernate.UserAccount;
+import pl.wsb.collection.model.RegisterUserRequest;
 import pl.wsb.collection.repository.AbstractRepository;
 import pl.wsb.collection.repository.EntityManagerHelper;
 
@@ -62,7 +63,7 @@ public class UserAccountRepository extends AbstractRepository<UserAccount, Integ
      *
      * @throws ValidationException
      */
-    public UserAccount registerUser() throws ValidationException {
+    public UserAccount registerUser(RegisterUserRequest userRequest) throws ValidationException {
 
 
         UserAccount userAccount = this.findByEmail("email");
@@ -73,7 +74,8 @@ public class UserAccountRepository extends AbstractRepository<UserAccount, Integ
         userAccount = new UserAccount();
         userAccount.setCreated(new Date());
         userAccount.setModified(new Date());
-        userAccount.setEmail("email"); //z requestu
+        userAccount.setEmail(userRequest.getEmail()); //z requestu
+        userAccount.setDateOfBirth(userRequest.getDateOfBirth());
         userAccount.setPassSalt(
                 DigestUtils.sha256Hex(
                         RandomStringUtils.randomAlphanumeric(256)

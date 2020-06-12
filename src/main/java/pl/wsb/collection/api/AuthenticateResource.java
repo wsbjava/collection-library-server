@@ -1,6 +1,15 @@
 package pl.wsb.collection.api;
 
+import org.apache.commons.lang.StringUtils;
 import pl.wsb.collection.api.consts.ApiEndpoints;
+import pl.wsb.collection.api.handlers.ErrorHandler;
+import pl.wsb.collection.exceptions.UnauthenticatedException;
+import pl.wsb.collection.exceptions.ValidationException;
+import pl.wsb.collection.hibernate.UserAccount;
+import pl.wsb.collection.model.AuthenticationRequest;
+import pl.wsb.collection.model.AuthenticationResponse;
+import pl.wsb.collection.repository.impl.ApiTokenRepository;
+import pl.wsb.collection.repository.impl.UserAccountRepository;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -21,11 +30,57 @@ public class AuthenticateResource {
      * @return
      */
     @POST
-    public Response postAuthenticate(){
-        return Response
-                .status(Response.Status.OK)
-                .entity("mock call ok")
-                .build();
+    public Response postAuthenticate(AuthenticationRequest body){
+
+        try{
+            if(body == null){
+                throw new ValidationException("No request data provided..");
+            }
+
+            if ((StringUtils.isBlank(body.getEMail())) ||
+                    (StringUtils.isBlank(body.getPassword()))) {
+                throw new ValidationException("No credentials data provided...");
+            }
+
+            UserAccountRepository userAccountRepository = new UserAccountRepository();
+            UserAccount userAccount = userAccountRepository.findByEmail(body.getEMail());
+            if (userAccount == null) {
+                throw new UnauthenticatedException();
+            } //if
+            if (!userAccount.validatePass(body.getPassword())) {
+                throw new UnauthenticatedException();
+            }
+
+            ApiTokenRepository apiTokenRepository = new ApiTokenRepository();
+            return Response.status(
+                    Response.Status.OK
+            ).entity(
+                    AuthenticationResponse.createFromApiToken(
+                            apiTokenRepository.generateApiToken(
+                                    userAccount
+                            )
+                    )
+            ).build();
+        }
+        catch (UnauthenticatedException ex) {
+            return Response.status(
+                    Response.Status.UNAUTHORIZED
+            ).entity(
+                    ErrorHandler.getErrorResponse(ex)
+            ).build();
+        } catch (ValidationException ex) {
+            return Response.status(
+                    Response.Status.BAD_REQUEST
+            ).entity(
+                    ErrorHandler.getErrorResponse(ex)
+            ).build();
+        } catch (Exception ex) {
+            return Response.status(
+                    Response.Status.INTERNAL_SERVER_ERROR
+            ).entity(
+                    ErrorHandler.getErrorResponse(ex)
+            ).build();
+        }
     }
 
 }

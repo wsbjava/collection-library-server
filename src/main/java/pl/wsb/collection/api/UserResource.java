@@ -2,6 +2,11 @@ package pl.wsb.collection.api;
 
 import com.google.protobuf.Api;
 import pl.wsb.collection.api.consts.ApiEndpoints;
+import pl.wsb.collection.api.handlers.ErrorHandler;
+import pl.wsb.collection.exceptions.ValidationException;
+import pl.wsb.collection.model.RegisterUserRequest;
+import pl.wsb.collection.model.User;
+import pl.wsb.collection.repository.impl.UserAccountRepository;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -18,11 +23,33 @@ public class UserResource {
      * @return
      */
     @POST
-    public Response postUser() {
-        return Response
-                .status(Response.Status.OK)
-                .entity("mock call ok...")
-                .build();
+    public Response postUser(RegisterUserRequest body) {
+        try
+        {
+            UserAccountRepository userAccountRepository = new UserAccountRepository();
+            return Response.status(
+                    Response.Status.OK
+            ).entity(
+                    User.createFromUserAccount(
+                            userAccountRepository.registerUser(body)
+                    )
+            ).build();
+        }
+        catch (ValidationException ex) {
+            return Response.status(
+                    Response.Status.BAD_REQUEST
+            ).entity(
+                    ErrorHandler.getErrorResponse(ex)
+            ).build();
+        } catch (Exception ex) {
+            return Response.status(
+                    Response.Status.INTERNAL_SERVER_ERROR
+            ).entity(
+                    ErrorHandler.getErrorResponse(ex)
+            ).build();
+        }
+
+
     }
 
     /**

@@ -24,6 +24,9 @@ public class ApiEndpoints {
     public static final String PUBLISHER = "/publisher";
     public static final String USER = "/user";
     public static final String ROLE = "/role";
+    public static final String MESSAGE = "/message";
+    public static final String SUGGEST = "/suggest";
+    public static final String SUGGESTION = "/suggestion";
 
 
     public static final String PARAM_LIMIT = "limit";
