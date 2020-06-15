@@ -16,7 +16,7 @@ import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.validation.constraints.*;
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaJerseyServerCodegen", date = "2020-06-08T19:18:47.684Z")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaJerseyServerCodegen", date = "2020-06-15T21:16:59.062Z")
 public class RentalsApiServiceImpl extends RentalsApiService {
     @Override
     public Response getUserRentalsList( @NotNull Integer limit,  @NotNull Integer offset,  @NotNull String phrases, SecurityContext securityContext) throws NotFoundException {

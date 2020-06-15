@@ -17,7 +17,7 @@ import java.io.InputStream;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.validation.constraints.*;
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaJerseyServerCodegen", date = "2020-06-08T19:18:47.684Z")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaJerseyServerCodegen", date = "2020-06-15T21:16:59.062Z")
 public abstract class SuggestionApiService {
     public abstract Response getSuggestionList( @NotNull Integer limit, @NotNull Integer offset, @NotNull String phrases,SecurityContext securityContext) throws NotFoundException;
     public abstract Response putSuggestionIdAccept(Integer id,SecurityContext securityContext) throws NotFoundException;

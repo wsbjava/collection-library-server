@@ -5,8 +5,12 @@
 
     <groupId>pl.wsb.collection</groupId>
     <artifactId>collection-library-server</artifactId>
-    <packaging>war</packaging>
+    <packaging>pom</packaging>
     <version>0.1</version>
+    <modules>
+        <module>untitled</module>
+        <module>collection-library-client-fx</module>
+    </modules>
     <name>collection-library-server</name>
 
     <build>

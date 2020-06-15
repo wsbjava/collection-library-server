@@ -12,6 +12,7 @@ import io.swagger.model.Error;
 import io.swagger.model.Item;
 import io.swagger.model.MessagesList;
 import io.swagger.model.ModifyRole;
+import io.swagger.model.RegisterUserRequest;
 import io.swagger.model.Role;
 import io.swagger.model.User;
 
@@ -35,7 +36,7 @@ import javax.validation.constraints.*;
 @Consumes({ "application/json" })
 @Produces({ "application/json" })
 @io.swagger.annotations.Api(description = "the user API")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaJerseyServerCodegen", date = "2020-06-08T19:18:47.684Z")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaJerseyServerCodegen", date = "2020-06-15T21:16:59.062Z")
 public class UserApi  {
    private final UserApiService delegate;
 
@@ -112,6 +113,22 @@ public class UserApi  {
 ,@Context SecurityContext securityContext)
     throws NotFoundException {
         return delegate.modifyRole(id,body,securityContext);
+    }
+    @POST
+    
+    @Consumes({ "application/json" })
+    @Produces({ "application/json" })
+    @io.swagger.annotations.ApiOperation(value = "Register user.", notes = "Registration of a new user.", response = User.class, tags={  })
+    @io.swagger.annotations.ApiResponses(value = { 
+        @io.swagger.annotations.ApiResponse(code = 200, message = "OK", response = User.class),
+        
+        @io.swagger.annotations.ApiResponse(code = 400, message = "Client error, e.g. unsufficient data", response = Error.class),
+        
+        @io.swagger.annotations.ApiResponse(code = 500, message = "Server error, e.g. unexpected exception", response = Error.class) })
+    public Response newUser(@ApiParam(value = "New user data" ) RegisterUserRequest body
+,@Context SecurityContext securityContext)
+    throws NotFoundException {
+        return delegate.newUser(body,securityContext);
     }
     @DELETE
     @Path("/message")
