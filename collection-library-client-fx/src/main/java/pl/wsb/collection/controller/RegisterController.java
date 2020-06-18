@@ -15,6 +15,10 @@ import org.apache.http.impl.client.HttpClients;
 import pl.wsb.collection.exceptions.ValidationException;
 import pl.wsb.collection.model.RegisterUserRequest;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import java.io.IOException;
 
 public class RegisterController {
@@ -61,32 +65,32 @@ public class RegisterController {
             if (this.tfAge == null) {
                 return;
             } //if
-            if (this.handleAuthCall(this.tfEmail.getText(),
-                    this.pfPassword.getText())) {
+            if (this.handleRegisterCall(this.tfEmail.getText(),
+                    this.pfPassword.getText(), this.pfPasswordCont.getText(), this.tfName.getText(), this.tfSurname.getText(), this.tfAge.getText())) {
                 createAlert(
-                        "Logowanie - sukces",
+                        "Rejestracja - sukces",
                         "Sukces",
-                        "Logowanie powiodło się.",
+                        "Rejestracja powiodła się.",
                         Alert.AlertType.INFORMATION
                 ).showAndWait();
             } else { //if
                 createAlert(
-                        "Logowanie - błąd",
+                        "Rejestracja - błąd",
                         "Ostrzeżenie",
-                        "Dane logowania nie wyglądają na poprawne.",
+                        "Dane rejestracji nie wyglądają na poprawne.",
                         Alert.AlertType.WARNING
                 ).showAndWait();
             } //else
         } catch (ValidationException ex) {
             createAlert(
-                    "Logowanie - ostrzeżenie",
+                    "Rejestracja - ostrzeżenie",
                     "Ostrzeżenie",
-                    "Proszę uzupełnić adres email i hasło.",
+                    "Proszę uzupełnić dane do rejestracji.",
                     Alert.AlertType.WARNING
             ).showAndWait();
         } catch (Exception ex) {
             createAlert(
-                    "Logowanie - błąd",
+                    "Rejestracja - błąd",
                     "Błąd",
                     "Przepraszamy, wystąpił błąd aplikacji.",
                     Alert.AlertType.ERROR
@@ -106,20 +110,36 @@ public class RegisterController {
     }
 
 
-    private boolean handleAuthCall(String email, String password) throws
-            ValidationException, IOException {
+    private boolean handleRegisterCall(String email, String password, String passwordControl, String name, String surname, String dateOfBirth) throws
+            ValidationException, IOException, ParseException {
         if (StringUtils.isBlank(email)) {
             throw new ValidationException();
         } //if
         if (StringUtils.isBlank(password)) {
             throw new ValidationException();
         } //if
+        if(StringUtils.equals(password,passwordControl)) {
+            throw new ValidationException();
+        }
+        if (StringUtils.isBlank(name)) {
+            throw new ValidationException();
+        } //if
+        if (StringUtils.isBlank(surname)) {
+            throw new ValidationException();
+        } //if
+        if (StringUtils.isBlank(dateOfBirth)) {
+            throw new ValidationException();
+        } //if
         CloseableHttpClient client = HttpClients.createDefault();
+
+        SimpleDateFormat formater = new SimpleDateFormat("dd-MM-yyyy");
+        Date convertDateOfBirth = formater.parse(dateOfBirth);
+
         HttpPost httpPost = new HttpPost("http://127.0.0.1:8080/api/v1/authenticate");
         ObjectMapper objectMapper = new ObjectMapper();
         StringEntity requestEntity = new StringEntity(
                 objectMapper.writeValueAsString(
-                        new RegisterUserRequest().email(email).password(password)
+                        new RegisterUserRequest().email(email).password(password).name(name).surname(surname).dateOfBirth(convertDateOfBirth)
                 ),
                 ContentType.APPLICATION_JSON
         );
