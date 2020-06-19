@@ -6,9 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.apache.commons.lang3.StringUtils;
@@ -31,7 +29,7 @@ public class LoginController {
     Parent root;
 
     @FXML
-    private TextField tfEmailAddress;
+    private TextField tfLogin;
     @FXML
     private PasswordField pfPassword;
     @FXML
@@ -46,8 +44,20 @@ public class LoginController {
         if (this.btnRegister != null) {
             this.btnRegister.setOnAction(this::handleRegisterClick);
         }
+        if (this.btnLogin  != null) {
+           this.btnLogin.setOnAction(this::handleLoginClick);
+        }
     }
+    private Alert createAlert(String title, String header, String content, Alert.AlertType alertType) {
+        final Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.getButtonTypes().clear();
+        alert.getButtonTypes().addAll(ButtonType.OK);
+        return alert;
 
+    }
     private void handleRegisterClick(ActionEvent actionEvent) {
         stage = (Stage) btnRegister.getScene().getWindow();
         FXMLLoader loader;
@@ -64,8 +74,49 @@ public class LoginController {
 
     }
 
+    private void handleLoginClick(ActionEvent actionEvent) {
+         try {
+            if (this.pfPassword == null) {
+                return;
+            } //if
+            if (this.tfLogin == null) {
+                return;
+            } //if
+            if (this.handleLoginCall(this.tfLogin.getText(),
+                    this.pfPassword.getText())) {
+                createAlert(
+                        "Logowanie - sukces",
+                        "Sukces",
+                        "Logowanie powiodło się.",
+                        Alert.AlertType.INFORMATION
+                ).showAndWait();
+            } else { //if
+                createAlert(
+                        "Logowanie - błąd",
+                        "Ostrzeżenie",
+                        "Dane logowania nie wyglądają na poprawne.",
+                        Alert.AlertType.WARNING
+                ).showAndWait();
+            } //else
+        } catch (ValidationException ex) {
+            createAlert(
+                    "Logowanie - ostrzeżenie",
+                    "Ostrzeżenie",
+                    "Proszę uzupełnić dane do logowania.",
+                    Alert.AlertType.WARNING
+            ).showAndWait();
+        } catch (Exception ex) {
+            createAlert(
+                    "Rejestracja - błąd",
+                    "Błąd",
+                    "Przepraszamy, wystąpił błąd aplikacji.",
+                    Alert.AlertType.ERROR
+            ).showAndWait();
+        }
 
-    private boolean handleAuthCall(String email, String password) throws
+    }
+
+    private boolean handleLoginCall(String email, String password) throws
             ValidationException, IOException {
         if (StringUtils.isBlank(email)) {
             throw new ValidationException();
@@ -74,7 +125,7 @@ public class LoginController {
             throw new ValidationException();
         } //if
         CloseableHttpClient client = HttpClients.createDefault();
-        HttpPost httpPost = new HttpPost("http://127.0.0.1:8080/api/v1/authenticate");
+        HttpPost httpPost = new HttpPost("http://127.0.0.1:8080/webapi/authenticate");
         ObjectMapper objectMapper = new ObjectMapper();
         StringEntity requestEntity = new StringEntity(
                 objectMapper.writeValueAsString(
@@ -94,6 +145,5 @@ public class LoginController {
         } //if
         return (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK);
     }
-
 
 }

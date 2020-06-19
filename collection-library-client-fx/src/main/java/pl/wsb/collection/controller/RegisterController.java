@@ -21,6 +21,8 @@ import java.util.Date;
 
 import java.io.IOException;
 
+import static jdk.nashorn.internal.objects.Global.println;
+
 public class RegisterController {
 
     @FXML
@@ -118,7 +120,7 @@ public class RegisterController {
         if (StringUtils.isBlank(password)) {
             throw new ValidationException();
         } //if
-        if(StringUtils.equals(password,passwordControl)) {
+        if(!StringUtils.equals(password,passwordControl)) {
             throw new ValidationException();
         }
         if (StringUtils.isBlank(name)) {
@@ -132,10 +134,10 @@ public class RegisterController {
         } //if
         CloseableHttpClient client = HttpClients.createDefault();
 
-        SimpleDateFormat formater = new SimpleDateFormat("dd-MM-yyyy");
-        Date convertDateOfBirth = formater.parse(dateOfBirth);
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        Date convertDateOfBirth = formatter.parse(dateOfBirth);
 
-        HttpPost httpPost = new HttpPost("http://127.0.0.1:8080/api/v1/authenticate");
+        HttpPost httpPost = new HttpPost("http://127.0.0.1:8080/webapi/user");
         ObjectMapper objectMapper = new ObjectMapper();
         StringEntity requestEntity = new StringEntity(
                 objectMapper.writeValueAsString(
