@@ -35,7 +35,7 @@ public class UserMessageStatus implements Serializable {
 	//bi-directional many-to-one association to Message
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="message_id", nullable=false)
-	private Messages message;
+	private Messages messages;
 
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne(fetch=FetchType.LAZY)
@@ -50,7 +50,7 @@ public class UserMessageStatus implements Serializable {
 		this.created = created;
 		this.modified = modified;
 		this.messageStatus = messageStatus;
-		this.message = message;
+		this.messages = message;
 		this.userAccount = userAccount;
 	}
 
@@ -87,11 +87,11 @@ public class UserMessageStatus implements Serializable {
 	}
 
 	public Messages getMessage() {
-		return this.message;
+		return this.messages;
 	}
 
 	public void setMessage(Messages message) {
-		this.message = message;
+		this.messages = message;
 	}
 
 	public UserAccount getUserAccount() {

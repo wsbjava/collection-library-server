@@ -7,12 +7,10 @@
     <artifactId>collection-library-server</artifactId>
     <packaging>pom</packaging>
     <version>0.1</version>
+    <name>collection-library-server</name>
     <modules>
-        <module>untitled</module>
         <module>collection-library-client-fx</module>
     </modules>
-    <name>collection-library-server</name>
-
     <build>
         <finalName>collection-library-server</finalName>
         <plugins>

@@ -82,10 +82,10 @@ public class UserAccountRepository extends AbstractRepository<UserAccount, Integ
                 )
         );
         userAccount.setPassHash(
-                userAccount.generatePassHash("pass z request", userAccount.getPassSalt())
+                userAccount.generatePassHash(userRequest.getPassword(), userAccount.getPassSalt())
         );
-        userAccount.setFirstName("firstname"); //z requesta
-        userAccount.setLastName("lastname"); //z request
+        userAccount.setFirstName(userRequest.getName()); //z requesta
+        userAccount.setLastName(userRequest.getSurname()); //z request
 
         EntityManagerHelper.startTransaction();
         userAccount = this.merge(userAccount);

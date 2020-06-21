@@ -29,7 +29,7 @@ public class Messages implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date modified;
 
-	@Column(nullable=false)
+	@Column(nullable=false,columnDefinition="TEXT")
 	private String message;
 
 	//bi-directional many-to-one association to CollectionType
