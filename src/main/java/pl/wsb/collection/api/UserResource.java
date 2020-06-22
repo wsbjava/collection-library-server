@@ -1,6 +1,5 @@
 package pl.wsb.collection.api;
 
-import com.google.protobuf.Api;
 import pl.wsb.collection.api.consts.ApiEndpoints;
 import pl.wsb.collection.api.handlers.ErrorHandler;
 import pl.wsb.collection.exceptions.ValidationException;
@@ -71,27 +70,64 @@ public class UserResource {
             @QueryParam(ApiEndpoints.PARAM_OFFSET) Integer offset,
             @QueryParam(ApiEndpoints.PARAM_SEARCH) String search
     ){
-        return Response
-                .status(Response.Status.OK)
-                .entity("mock call ok...")
-                .build();
+
+        try
+        {
+            UserAccountRepository userAccountRepository = new UserAccountRepository();
+            return Response.status(
+                    Response.Status.OK
+            ).entity(
+                    userAccountRepository.findAll(limit, offset, search)
+            ).build();
+        } catch (Exception e) {
+            return Response.status(
+                    Response.Status.INTERNAL_SERVER_ERROR
+            ).entity(
+                    ErrorHandler.getErrorResponse(e)
+            ).build();
+        }
     }
 
     @DELETE
-    @Path(ApiEndpoints.QUERY_PARAM_ID)
-    public Response deleteUser(Integer id){
-        return Response
-                .status(Response.Status.NO_CONTENT)
-                .build();
+    @Path(ApiEndpoints.PATH_PARAM_ID)
+    public Response deleteUser(@PathParam(ApiEndpoints.PARAM_ID) Integer id){
+
+        try
+        {
+            UserAccountRepository userAccountRepository = new UserAccountRepository();
+            userAccountRepository.delete(userAccountRepository.find(id));
+            return Response.status(
+                    Response.Status.OK
+            ).build();
+        }
+        catch (Exception ex)
+        {
+            return Response.status(
+                    Response.Status.INTERNAL_SERVER_ERROR
+            ).entity(
+                    ErrorHandler.getErrorResponse(ex)
+            ).build();
+        }
     }
 
     @GET
-    @Path(ApiEndpoints.QUERY_PARAM_ID)
-    public Response getUser(Integer id){
-        return Response
-                .status(Response.Status.OK)
-                .entity("mock call ok...")
-                .build();
+    @Path(ApiEndpoints.PATH_PARAM_ID)
+    public Response getUser(@PathParam(ApiEndpoints.PARAM_ID) Integer id){
+        try
+        {
+            UserAccountRepository userAccountRepository = new UserAccountRepository();
+            return Response.status(
+                    Response.Status.OK
+            ).entity(
+                    userAccountRepository.find(id)
+            ).build();
+        } catch (Exception ex) {
+            return Response.status(
+                    Response.Status.INTERNAL_SERVER_ERROR
+            ).entity(
+                    ErrorHandler.getErrorResponse(ex)
+            ).build();
+        }
     }
 
 }

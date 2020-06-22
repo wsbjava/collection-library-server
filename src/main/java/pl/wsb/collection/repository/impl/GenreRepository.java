@@ -21,7 +21,7 @@ public class GenreRepository extends AbstractRepository<Genre, Integer> {
 
     /**
      *
-     * This methos is used to fetch from DB a Role object based on unique abbr value
+     * This method is used to fetch from DB a Role object based on unique abbr value
      *
      * @param abbr - an uniqu role abbr name
      *
@@ -57,7 +57,7 @@ public class GenreRepository extends AbstractRepository<Genre, Integer> {
      *
      * @return List<Genre>
      */
-    public List<Genre> findAll(){
+    public List<Genre> findAll(Integer limit, Integer offest, String search){
         CriteriaBuilder criteriaBuilder = EntityManagerHelper.entityManager().getCriteriaBuilder();
         CriteriaQuery<Genre> criteriaQuery = criteriaBuilder.createQuery(Genre.class);
         Root<Genre> genres = criteriaQuery.from(Genre.class);

@@ -21,7 +21,7 @@ class CollectionTypeRepositoryTest {
     @Test
     void findAllCollectionTypes() {
         CollectionTypeRepository collectionTypeRepository = new CollectionTypeRepository();
-        List<CollectionType> collectionTypeList = collectionTypeRepository.findAll();
+        List<CollectionType> collectionTypeList = collectionTypeRepository.findAll(10, 10, "");
 
         assertEquals(3, collectionTypeList.size());
     }

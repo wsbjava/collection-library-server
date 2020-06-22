@@ -1,5 +1,7 @@
 package pl.wsb.collection.hibernate;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
@@ -38,11 +40,13 @@ public class CollectionType implements Serializable {
 	private String name;
 
 	//bi-directional many-to-one association to CollectionEntry
-	@OneToMany(fetch = FetchType.LAZY,  mappedBy="collectionType")
+	@OneToMany(fetch = FetchType.EAGER,  mappedBy="collectionType")
+	@JsonManagedReference
 	private Set<CollectionEntry> collectionEntries = new HashSet<>(0);
 
 	//bi-directional many-to-one association to GenreCollectionType
-	@OneToMany(fetch = FetchType.LAZY, mappedBy="collectionType")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy="collectionType")
+	@JsonManagedReference
 	private Set<GenreCollectionType> genreCollectionTypes = new HashSet<>(0);
 
 	public CollectionType() {

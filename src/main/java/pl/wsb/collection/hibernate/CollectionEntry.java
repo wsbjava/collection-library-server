@@ -1,5 +1,8 @@
 package pl.wsb.collection.hibernate;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
@@ -39,33 +42,40 @@ public class CollectionEntry implements Serializable {
 	private String title;
 
 	//bi-directional many-to-one association to CollectionRequestStatus
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="request_status_id")
+	@JsonBackReference
 	private CollectionRequestStatus collectionRequestStatus;
 
 	//bi-directional many-to-one association to CollectionType
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="collection_type_id")
+	@JsonBackReference
 	private CollectionType collectionType;
 
 	//bi-directional many-to-one association to CollectionEntryAuthor
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="collectionEntry")
+	@JsonManagedReference
 	private Set<CollectionEntryAuthor> collectionEntryAuthors = new HashSet<>(0);
 
 	//bi-directional many-to-one association to CollectionEntryGenre
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="collectionEntry")
+	@JsonManagedReference
 	private Set<CollectionEntryGenre> collectionEntryGenres = new HashSet<>(0);
 
 	//bi-directional many-to-one association to CollectionEntryPublisher
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="collectionEntry")
+	@JsonManagedReference
 	private Set<CollectionEntryPublisher> collectionEntryPublishers = new HashSet<>(0);
 
 	//bi-directional many-to-one association to CollectionLibrary
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="collectionEntry")
+	@JsonManagedReference
 	private Set<CollectionLibrary> collectionLibraries = new HashSet<>(0);
 
 	//bi-directional many-to-one association to Suggestion
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="collectionEntry")
+	@JsonManagedReference
 	private Set<Suggestion> suggestions;
 
 	public CollectionEntry() {

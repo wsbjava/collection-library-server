@@ -1,5 +1,7 @@
 package pl.wsb.collection.hibernate;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
@@ -37,7 +39,8 @@ public class Role implements Serializable {
 	private String name;
 
 	//bi-directional many-to-one association to UserAccountRole
-	@OneToMany(fetch = FetchType.LAZY, mappedBy="role")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy="role")
+	@JsonManagedReference
 	private Set<UserAccountRole> userAccountRoles = new HashSet<>(0);
 
 	public Role(){

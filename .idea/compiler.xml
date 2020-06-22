@@ -6,10 +6,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="collection-library-server" />
         <module name="collection-library-client-fx" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="collection-library-client-fx" target="8" />
       <module name="collection-library-desktop-client" target="1.5" />
     </bytecodeTargetLevel>
   </component>

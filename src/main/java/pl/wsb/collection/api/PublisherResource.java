@@ -24,8 +24,8 @@ public class PublisherResource {
     }
 
     @GET
-    @Path(ApiEndpoints.QUERY_PARAM_ID)
-    public Response getPublisher(Integer id){
+    @Path(ApiEndpoints.PATH_PARAM_ID)
+    public Response getPublisher(@QueryParam(ApiEndpoints.PARAM_ID) Integer id){
         return Response
                 .status(Response.Status.OK)
                 .entity("mock call ok...")
@@ -59,8 +59,8 @@ public class PublisherResource {
     }
 
     @DELETE
-    @Path(ApiEndpoints.QUERY_PARAM_ID)
-    public Response deletePublisher(Integer id){
+    @Path(ApiEndpoints.PATH_PARAM_ID)
+    public Response deletePublisher(@QueryParam("id") Integer id){
         return Response
                 .status(Response.Status.NO_CONTENT)
                 .build();

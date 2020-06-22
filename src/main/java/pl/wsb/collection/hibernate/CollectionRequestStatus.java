@@ -1,5 +1,7 @@
 package pl.wsb.collection.hibernate;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
@@ -37,7 +39,8 @@ public class CollectionRequestStatus implements Serializable {
 	private String name;
 
 	//bi-directional many-to-one association to CollectionEntry
-	@OneToMany(fetch = FetchType.LAZY, mappedBy="collectionRequestStatus")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy="collectionRequestStatus")
+	@JsonManagedReference
 	private Set<CollectionEntry> collectionEntries = new HashSet<>(0);
 
 	public CollectionRequestStatus() {

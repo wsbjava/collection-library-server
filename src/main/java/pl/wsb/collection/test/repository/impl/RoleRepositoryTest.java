@@ -21,7 +21,7 @@ class RoleRepositoryTest {
     @Test
     void selectAllRoles(){
         RoleRepository roleRepository = new RoleRepository();
-        List<Role> roles = roleRepository.findAll();
+        List<Role> roles = roleRepository.findAll(100, 0, "");
 
         assertEquals(3, roles.size());
     }

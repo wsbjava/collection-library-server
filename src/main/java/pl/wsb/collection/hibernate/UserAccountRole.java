@@ -1,5 +1,7 @@
 package pl.wsb.collection.hibernate;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
@@ -27,13 +29,15 @@ public class UserAccountRole implements Serializable {
 	private Date modified;
 
 	//bi-directional many-to-one association to Role
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="role_id", nullable=false)
+	@JsonBackReference
 	private Role role;
 
 	//bi-directional many-to-one association to UserAccount
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="user_account_id", nullable=false)
+	@JsonBackReference
 	private UserAccount userAccount;
 
 	public UserAccountRole() {

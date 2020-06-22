@@ -1,5 +1,7 @@
 package pl.wsb.collection.hibernate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
 import pl.wsb.collection.exceptions.ValidationException;
@@ -48,27 +50,34 @@ public class UserAccount implements Serializable {
 	private Date dateOfBirth;
 
 	@Column(name="pass_hash", nullable=false, length=255)
+	@JsonIgnore
 	private String passHash;
 
 	@Column(name="pass_salt", nullable=false, length=255)
+	@JsonIgnore
 	private String passSalt;
 
 	//bi-directional many-to-one association to ApiToken
 	@OneToMany(fetch = FetchType.LAZY, mappedBy="userAccount")
+	@JsonManagedReference
 	private Set<ApiToken> apiTokens = new HashSet<>(0);
 
 	//bi-directional many-to-one association to CollectionLibrary
 	@OneToMany(fetch = FetchType.LAZY, mappedBy="userAccount")
+	@JsonManagedReference
 	private Set<CollectionLibrary> collectionLibraries = new HashSet<>(0);
 
-	@OneToMany(mappedBy="userAccount")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy="userAccount")
+	@JsonManagedReference
 	private Set<Suggestion> suggestions;
 
 	//bi-directional many-to-one association to UserAccountRole
-	@OneToMany(fetch = FetchType.LAZY, mappedBy="userAccount")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy="userAccount")
+	@JsonManagedReference
 	private Set<UserAccountRole> userAccountRoles = new HashSet<>(0);
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy="userAccount")
+	@JsonManagedReference
 	private Set<UserMessageStatus> userMessageStatuses;
 
 	public UserAccount() {

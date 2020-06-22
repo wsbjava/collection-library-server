@@ -7,6 +7,7 @@ import org.apache.commons.lang.StringUtils;
 import pl.wsb.collection.exceptions.ValidationException;
 import pl.wsb.collection.hibernate.UserAccount;
 import pl.wsb.collection.model.RegisterUserRequest;
+import pl.wsb.collection.model.User;
 import pl.wsb.collection.repository.AbstractRepository;
 import pl.wsb.collection.repository.EntityManagerHelper;
 
@@ -52,7 +53,6 @@ public class UserAccountRepository extends AbstractRepository<UserAccount, Integ
 
         return this.getFirstResultOrNull(EntityManagerHelper.entityManager().createQuery(criteriaQuery).getResultList());
     }
-
     /**
      *
      * With this method is available to add new User to the system
@@ -66,7 +66,7 @@ public class UserAccountRepository extends AbstractRepository<UserAccount, Integ
     public UserAccount registerUser(RegisterUserRequest userRequest) throws ValidationException {
 
 
-        UserAccount userAccount = this.findByEmail("email");
+        UserAccount userAccount = this.findByEmail(userRequest.getEmail());
         if(userAccount !=null){
             throw new ValidationException("The email is already registered");
         }
@@ -98,8 +98,7 @@ public class UserAccountRepository extends AbstractRepository<UserAccount, Integ
                 userAccount,
                 roleRepository.findByAbbr("USER")
         );
-        if(true)
-            throw new NotImplementedException("TO DO - dokończyć tą metodę");
+
         return userAccount;
 
     }
@@ -111,7 +110,7 @@ public class UserAccountRepository extends AbstractRepository<UserAccount, Integ
      * @return List<UserAccount>
      *
      */
-    protected List<UserAccount> findAll() {
+    public List<UserAccount> findAll(Integer limit, Integer offset, String search) {
         CriteriaBuilder criteriaBuilder = EntityManagerHelper.entityManager().getCriteriaBuilder();
         CriteriaQuery<UserAccount> criteriaQuery = criteriaBuilder.createQuery(UserAccount.class);
         Root<UserAccount> root = criteriaQuery.from(UserAccount.class);

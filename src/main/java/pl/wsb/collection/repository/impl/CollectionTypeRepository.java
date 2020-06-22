@@ -2,6 +2,7 @@ package pl.wsb.collection.repository.impl;
 
 import org.apache.commons.lang.StringUtils;
 import pl.wsb.collection.hibernate.CollectionType;
+import pl.wsb.collection.hibernate.UserAccount;
 import pl.wsb.collection.repository.AbstractRepository;
 import pl.wsb.collection.repository.EntityManagerHelper;
 
@@ -39,7 +40,7 @@ public class CollectionTypeRepository extends AbstractRepository<CollectionType,
         return this.getFirstResultOrNull(EntityManagerHelper.entityManager().createQuery(criteriaQuery).getResultList());
     }
 
-    public List<CollectionType> findAll(){
+    public List<CollectionType> findAll(Integer limit, Integer offset, String search){
         CriteriaBuilder criteriaBuilder = EntityManagerHelper.entityManager().getCriteriaBuilder();
         CriteriaQuery<CollectionType> criteriaQuery = criteriaBuilder.createQuery(CollectionType.class);
         Root<CollectionType> collectionTypes = criteriaQuery.from(CollectionType.class);

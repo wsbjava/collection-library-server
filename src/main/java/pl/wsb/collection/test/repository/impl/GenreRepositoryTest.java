@@ -24,7 +24,7 @@ class GenreRepositoryTest {
     @Test
     void findAllRoles() {
         GenreRepository genreRepository = new GenreRepository();
-        List<Genre> genreList = genreRepository.findAll();
+        List<Genre> genreList = genreRepository.findAll(10, 10, "");
 
         assertEquals(13, genreList.size());
     }

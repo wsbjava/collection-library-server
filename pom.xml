@@ -5,12 +5,12 @@
 
     <groupId>pl.wsb.collection</groupId>
     <artifactId>collection-library-server</artifactId>
-    <packaging>pom</packaging>
+    <packaging>war</packaging>
     <version>0.1</version>
     <name>collection-library-server</name>
-    <modules>
+    <!--<modules>
         <module>collection-library-client-fx</module>
-    </modules>
+    </modules>-->
     <build>
         <finalName>collection-library-server</finalName>
         <plugins>
@@ -20,8 +20,8 @@
                 <version>2.5.1</version>
                 <inherited>true</inherited>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>8</source>
+                    <target>8</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -96,6 +96,12 @@
             <version>${io.swagger.version}</version>
             <scope>compile</scope>
 
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.8</version>
+            <scope>compile</scope>
         </dependency>
 
         <!-- uncomment this to get JSON support

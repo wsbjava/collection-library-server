@@ -1,5 +1,7 @@
 package pl.wsb.collection.hibernate;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
@@ -39,6 +41,7 @@ public class ApiToken implements Serializable {
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="user_account_id", nullable=false)
+	@JsonBackReference
 	private UserAccount userAccount;
 
 	public ApiToken() {

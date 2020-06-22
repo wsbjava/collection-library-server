@@ -1,5 +1,7 @@
 package pl.wsb.collection.repository;
 
+import pl.wsb.collection.exceptions.ValidationException;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -18,7 +20,7 @@ public abstract class AbstractRepository<T, ID extends Serializable> implements 
     }
 
     @Override
-    public T find(ID id) {
+    public T find(ID id) throws ValidationException {
         return EntityManagerHelper.entityManager().find(getPersistentClass(), id);
     }
 

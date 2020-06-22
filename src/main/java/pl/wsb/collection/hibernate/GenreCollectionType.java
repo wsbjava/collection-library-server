@@ -1,5 +1,7 @@
 package pl.wsb.collection.hibernate;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
@@ -27,13 +29,15 @@ public class GenreCollectionType implements Serializable {
 	private Date modified;
 
 	//bi-directional many-to-one association to CollectionType
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="collection_type_id", nullable=false)
+	@JsonBackReference
 	private CollectionType collectionType;
 
 	//bi-directional many-to-one association to Genre
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="genre_id", nullable=false)
+	@JsonBackReference
 	private Genre genre;
 
 	public GenreCollectionType() {

@@ -1,5 +1,7 @@
 package pl.wsb.collection.hibernate;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import java.io.Serializable;
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -30,16 +32,19 @@ public class UserMessageStatus implements Serializable {
 	//bi-directional many-to-one association to MessageStatus
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="status_id", nullable=false)
+	@JsonBackReference
 	private MessageStatus messageStatus;
 
 	//bi-directional many-to-one association to Message
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="message_id", nullable=false)
+	@JsonBackReference
 	private Messages messages;
 
 	//bi-directional many-to-one association to UserAccount
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="user_id", nullable=false)
+	@JsonBackReference
 	private UserAccount userAccount;
 
 	public UserMessageStatus() {

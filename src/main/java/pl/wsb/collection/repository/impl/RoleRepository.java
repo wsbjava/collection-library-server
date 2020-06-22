@@ -55,7 +55,7 @@ public class RoleRepository extends AbstractRepository<Role, Integer> {
      *
      * @return List<Role>
      */
-    public List<Role> findAll(){
+    public List<Role> findAll(Integer limit, Integer offset, String search){
         CriteriaBuilder criteriaBuilder = EntityManagerHelper.entityManager().getCriteriaBuilder();
         CriteriaQuery<Role> criteriaQuery = criteriaBuilder.createQuery(Role.class);
         Root<Role> roles = criteriaQuery.from(Role.class);

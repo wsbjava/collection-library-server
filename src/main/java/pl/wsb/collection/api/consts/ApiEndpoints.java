@@ -2,19 +2,27 @@ package pl.wsb.collection.api.consts;
 
 public class ApiEndpoints {
 
-    public static final String QUERY_PARAM_ID = "/{id}";
+    public static final String PATH_PARAM_ID = "/{id}";
+    public static final String PATH_PARAM_ABBR = "/{abbr}";
+    public static final String ABBR = "/byAbbr";
+    public static final String PENDING = "/pending";
+    public static final String REJECT = "/reject";
+    public static final String ACCEPT = "/accept";
+
 
     //Definionts of cons path
     public static final String AUTHENTICATE = "/authenticate";
 
-    public static final String COLLECTION_ENTRY = "/collection_entry";
+    public static final String COLLECTION_ENTRY = "/collectionEntry";
     public static final String COLLECTION_ENTRY_TYPE = "/type";
     public static final String COLLECTION_ENTRY_GENRE = "/genre";
 
 
 
-    public static final String COLLECTION_ENTRY_ID_ACCEPT = ApiEndpoints.QUERY_PARAM_ID + "/accept";
-    public static final String COLLECTION_ENTRY_ID_REJECT = ApiEndpoints.QUERY_PARAM_ID + "/reject";
+    public static final String COLLECTION_ENTRY_ID_ACCEPT = ApiEndpoints.PATH_PARAM_ID + ApiEndpoints.ACCEPT;
+    public static final String COLLECTION_ENTRY_ID_REJECT = ApiEndpoints.PATH_PARAM_ID + ApiEndpoints.REJECT;
+    public static final String COLLECTION_ENTRY_ID_ASSING_GENRE = ApiEndpoints.PATH_PARAM_ID + "/assignGenre" + ApiEndpoints.PATH_PARAM_ABBR;
+    public static final String COLLECTION_ENTRY_ID_UNASSING_GENRE = ApiEndpoints.PATH_PARAM_ID + "/unassignGenre" + ApiEndpoints.PATH_PARAM_ABBR;
 
 
     public static final String COLLECTION_TYPE = "/collection_type";
@@ -32,5 +40,7 @@ public class ApiEndpoints {
     public static final String PARAM_LIMIT = "limit";
     public static final String PARAM_OFFSET = "offset";
     public static final String PARAM_SEARCH = "search";
+    public static final String PARAM_ID = "id";
+    public static final String PARAM_ABBR = "abbr";
 
 }
