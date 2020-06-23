@@ -1,5 +1,6 @@
 package pl.wsb.collection.test.api;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -41,14 +42,32 @@ class CollectionEntryResourceTest {
             httpPost.setHeader("Accept", "application/json");
             httpPost.setHeader("Content-type", "application/json");
             CloseableHttpResponse response = client.execute(httpPost);
-            this.authResponse = new ObjectMapper().readValue(response.getEntity().getContent(), AuthenticationResponse.class);
+
+
+            this.authResponse = new ObjectMapper()
+                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+
+                    .readValue(response.getEntity().getContent(), AuthenticationResponse.class);
+
+
             System.out.println(this.authResponse.getAccessToken());
             System.out.println(this.authResponse.getEmailAddress());
             System.out.println(this.authResponse.getExpiresIn());
             System.out.println(this.authResponse.getUserId());
+            this.authResponse.getRole().forEach((e)->
+            {
+                System.out.println(e.getAbbr() + " "+ e.getName());
+            });
+
 
         }
-        catch (IOException ioExp){}
+        catch (IOException ioExp){
+
+            System.out.println(ioExp.getMessage());
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 
     @Test

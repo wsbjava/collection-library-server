@@ -77,6 +77,10 @@ definitions:
          type: integer
       email_address:
          type: string
+      roles:
+         type: array
+         items:
+           $ref: '#/definitions/Role'
     required:
       - access_token
       - expires_in
@@ -87,6 +91,10 @@ definitions:
      expires_in: 1800
      user_id: 1
      user_mail: 'uzytkownik@java-course-wsb.pl'
+     roles:
+       - id: 1
+         abbr: 'Role'
+         function: 'Sample role'
 
   Role:
     type: object
@@ -94,6 +102,9 @@ definitions:
       id:
         type: integer
         description: Role id
+      abbr:
+        type: string
+        description: Short name of role
       function:
         type: string
         description: Role's function
@@ -102,6 +113,7 @@ definitions:
       - function
     example:
       id: 1
+      abbr: 'Role'
       function: 'Sample Role'
   User:
     type: object
@@ -124,6 +136,7 @@ definitions:
       email: 'user@collection-library.pl'
       role:
         - id: 1
+          abbr: 'Role'
           function: 'Sample role'
   ModifyRole:
     type: object

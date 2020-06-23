@@ -14,6 +14,8 @@
 package pl.wsb.collection.model;
 
 import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
@@ -30,6 +32,9 @@ public class Role   {
 
   @JsonProperty("function")
   private String function = null;
+
+  @JsonProperty("abbr")
+  private String abbr = null;
 
   public Role id(Integer id) {
     this.id = id;
@@ -71,6 +76,24 @@ public class Role   {
     this.function = function;
   }
 
+  /**
+   * Role&#39;s function
+   * @return function
+   **/
+  @JsonProperty("function")
+  @ApiModelProperty(required = true, value = "Role's function")
+  @NotNull
+  public String getAbbr() {
+    return abbr;
+  }
+  public Role abbr(String abbr){
+    this.abbr = abbr;
+    return this;
+  }
+  public void setAbbr(String abbr) {
+    this.abbr = abbr;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -82,12 +105,13 @@ public class Role   {
     }
     Role role = (Role) o;
     return Objects.equals(this.id, role.id) &&
-        Objects.equals(this.function, role.function);
+        Objects.equals(this.function, role.function) &&
+        Objects.equals(this.abbr, role.abbr);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, function);
+    return Objects.hash(id, function, abbr);
   }
 
 
@@ -98,6 +122,7 @@ public class Role   {
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    function: ").append(toIndentedString(function)).append("\n");
+    sb.append("    abbr: ").append(toIndentedString(abbr)).append("\n");
     sb.append("}");
     return sb.toString();
   }

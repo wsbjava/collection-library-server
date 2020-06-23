@@ -1,6 +1,7 @@
 package pl.wsb.collection.api;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.util.EntityUtils;
 import pl.wsb.collection.api.consts.ApiEndpoints;
 import pl.wsb.collection.api.handlers.ErrorHandler;
 import pl.wsb.collection.exceptions.UnauthenticatedException;
@@ -52,15 +53,24 @@ public class AuthenticateResource {
             }
 
             ApiTokenRepository apiTokenRepository = new ApiTokenRepository();
-            return Response.status(
+
+            AuthenticationResponse authenticationResponse = AuthenticationResponse.createFromApiToken(
+                    apiTokenRepository.generateApiToken(
+                        userAccount
+            ));
+
+
+            Response response = Response.status(
                     Response.Status.OK
             ).entity(
-                    AuthenticationResponse.createFromApiToken(
-                            apiTokenRepository.generateApiToken(
-                                    userAccount
-                            )
-                    )
+                    authenticationResponse
             ).build();
+
+
+            System.out.println(response.getStringHeaders());
+            System.out.println(response.toString());
+            System.out.println(response.getEntity().toString());
+            return response;
         }
         catch (UnauthenticatedException ex) {
             return Response.status(

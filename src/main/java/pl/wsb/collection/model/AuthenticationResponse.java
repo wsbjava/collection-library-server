@@ -1,12 +1,18 @@
 package pl.wsb.collection.model;
 
-import java.util.Objects;
+import java.util.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import pl.wsb.collection.exceptions.ApiException;
 import pl.wsb.collection.hibernate.ApiToken;
+import pl.wsb.collection.hibernate.UserAccount;
+import pl.wsb.collection.hibernate.Role;
+import pl.wsb.collection.hibernate.UserAccountRole;
 
 import javax.validation.constraints.*;
 
@@ -19,8 +25,15 @@ public class AuthenticationResponse {
     private Integer userId = null;
     @JsonProperty("email_address")
     private String emailAddress = null;
+    @JsonProperty("roles")
+    private List<RoleResponse> roles = new ArrayList<RoleResponse>();
     public AuthenticationResponse accessToken(String accessToken) {
         this.accessToken = accessToken;
+        return this;
+    }
+
+    public AuthenticationResponse roles(List<RoleResponse> roles) {
+        this.roles = roles;
         return this;
     }
     /**
@@ -87,6 +100,20 @@ public class AuthenticationResponse {
     public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
     }
+
+    /**
+     * Get role
+     * @return role
+     **/
+    @JsonProperty("roles")
+    @ApiModelProperty(value = "")
+    public List<RoleResponse> getRole() {
+        return roles;
+    }
+    public void setRole(List<RoleResponse> roles) {
+        this.roles = roles;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -99,11 +126,12 @@ public class AuthenticationResponse {
         return Objects.equals(this.accessToken, authenticationResponse.accessToken) &&
                 Objects.equals(this.expiresIn, authenticationResponse.expiresIn) &&
                 Objects.equals(this.userId, authenticationResponse.userId) &&
-                Objects.equals(this.emailAddress, authenticationResponse.emailAddress);
+                Objects.equals(this.emailAddress, authenticationResponse.emailAddress) &&
+                Objects.equals(this.roles, authenticationResponse.roles);
     }
     @Override
     public int hashCode() {
-        return Objects.hash(accessToken, expiresIn, userId, emailAddress);
+        return Objects.hash(accessToken, expiresIn, userId, emailAddress, roles);
     }
     @Override
     public String toString() {
@@ -114,6 +142,7 @@ public class AuthenticationResponse {
         sb.append(" expiresIn: ").append(toIndentedString(expiresIn)).append("\n");
         sb.append(" userId: ").append(toIndentedString(userId)).append("\n");
         sb.append(" emailAddress: ").append(toIndentedString(emailAddress)).append("\n");
+        sb.append(" roles: ").append(toIndentedString(roles)).append("\n");
         sb.append("}");
         return sb.toString();
     }
@@ -136,12 +165,25 @@ public class AuthenticationResponse {
         if (token.getUserAccount() == null) {
             throw new ApiException("Token user information data is null...");
         }
+
+        List<RoleResponse> roles = new ArrayList<RoleResponse>();
+        for(UserAccountRole userAccountRole : token.getUserAccount().getUserAccountRoles())
+        {
+            Role role = userAccountRole.getRole();
+            RoleResponse roleResponse = new RoleResponse(
+                    role.getCreated(), role.getModified(), role.getName(), role.getAbbr(), role.getDeleted()
+            );
+            roles.add(roleResponse);
+        }
         return new AuthenticationResponse()
                 .accessToken(token.getAccessToken())
                 .emailAddress(token.getUserAccount().getEmail())
                 .expiresIn(1800)
-                .userId(token.getUserAccount().getId());
+                .userId(token.getUserAccount().getId())
+                .roles(roles);
     }
+
+
 
 }
 
