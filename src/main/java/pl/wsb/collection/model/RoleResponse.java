@@ -34,17 +34,13 @@ public class RoleResponse implements Serializable {
 
   private int id;
 
-
   private String abbr;
-
 
   private Date created;
 
   private int deleted;
 
-
   private Date modified;
-
 
   private String name;
 
@@ -57,7 +53,8 @@ public class RoleResponse implements Serializable {
     this.modified = modified;
     this.abbr = abbr;
   }
-  public RoleResponse(Date created, Date modified, String name, String abbr, Integer deleted) {
+  public RoleResponse(int id, Date created, Date modified, String name, String abbr, Integer deleted) {
+    this.id = id;
     this.created = created;
     this.modified = modified;
     this.name = name;

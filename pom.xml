@@ -100,9 +100,9 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.5.8</version>
-            <scope>compile</scope>
+            <version>4.5.12</version>
         </dependency>
+
 
         <!-- uncomment this to get JSON support
         <dependency>

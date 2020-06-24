@@ -170,7 +170,7 @@ public class AuthenticationResponse {
         for(UserAccountRole userAccountRole : token.getUserAccount().getUserAccountRoles())
         {
             Role role = userAccountRole.getRole();
-            RoleResponse roleResponse = new RoleResponse(
+            RoleResponse roleResponse = new RoleResponse(role.getId(),
                     role.getCreated(), role.getModified(), role.getName(), role.getAbbr(), role.getDeleted()
             );
             roles.add(roleResponse);
