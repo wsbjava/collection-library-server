@@ -18,8 +18,11 @@ public class UserResource {
 
     /**
      *
-     * @TODO - request na podstawie swaggera
-     * @return
+     * Rejestracja użytkownika na podstawie requesta
+     *
+     * @param RegisterUserRequest body
+     *
+     * @return Respone
      */
     @POST
     public Response postUser(RegisterUserRequest body) {
@@ -73,6 +76,9 @@ public class UserResource {
 
         try
         {
+
+            System.out.println(ApiEndpoints.USER_SET_ROLE);
+
             UserAccountRepository userAccountRepository = new UserAccountRepository();
             return Response.status(
                     Response.Status.OK
@@ -122,6 +128,31 @@ public class UserResource {
                     userAccountRepository.find(id)
             ).build();
         } catch (Exception ex) {
+            return Response.status(
+                    Response.Status.INTERNAL_SERVER_ERROR
+            ).entity(
+                    ErrorHandler.getErrorResponse(ex)
+            ).build();
+        }
+    }
+
+    @PUT
+    @Path(ApiEndpoints.USER_SET_ROLE)
+    public Response setUserRole(
+            @PathParam(ApiEndpoints.PARAM_ID) Integer id,
+            @PathParam(ApiEndpoints.PARAM_ABBR) String abbr)
+    {
+        try{
+            UserAccountRepository userAccountRepository = new UserAccountRepository();
+
+
+
+            return Response
+                    .status(Response.Status.OK)
+                    .entity(userAccountRepository.setRole(id, abbr))
+                    .build();
+        }
+        catch (Exception ex){
             return Response.status(
                     Response.Status.INTERNAL_SERVER_ERROR
             ).entity(

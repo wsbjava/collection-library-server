@@ -1,5 +1,7 @@
 package pl.wsb.collection.hibernate;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
@@ -38,6 +40,7 @@ public class CollectionLibraryStatus implements Serializable {
 
 	//bi-directional many-to-one association to CollectionLibrary
 	@OneToMany(fetch = FetchType.LAZY,  mappedBy="collectionLibraryStatus")
+	@JsonBackReference
 	private Set<CollectionLibrary> collectionLibraries = new HashSet<>(0);
 
 	public CollectionLibraryStatus() {

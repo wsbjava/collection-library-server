@@ -1,6 +1,7 @@
 package pl.wsb.collection.hibernate;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.io.Serializable;
@@ -70,7 +71,7 @@ public class CollectionEntry implements Serializable {
 
 	//bi-directional many-to-one association to CollectionLibrary
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="collectionEntry")
-	@JsonManagedReference
+	@JsonBackReference("CollectionEntry")
 	private Set<CollectionLibrary> collectionLibraries = new HashSet<>(0);
 
 	//bi-directional many-to-one association to Suggestion

@@ -1,5 +1,7 @@
 package pl.wsb.collection.api.consts;
 
+import com.google.protobuf.Api;
+
 public class ApiEndpoints {
 
     public static final String PATH_PARAM_ID = "/{id}";
@@ -27,10 +29,17 @@ public class ApiEndpoints {
 
     public static final String COLLECTION_TYPE = "/collection_type";
     public static final String COLLECTION_LIBRARY = "/collection_library";
+
+    public static final String COLLECTION_LIBRARY_RENT = "/rent";
+    public static final String COLLECTION_LIBRARY_RETURN = "/return";
+
     public static final String GENRE = "/genre";
     public static final String AUTHOR = "/author";
     public static final String PUBLISHER = "/publisher";
+
     public static final String USER = "/user";
+    public static final String USER_SET_ROLE = ApiEndpoints.PATH_PARAM_ID + "/setRole" + ApiEndpoints.PATH_PARAM_ABBR;
+
     public static final String ROLE = "/role";
     public static final String MESSAGE = "/message";
     public static final String SUGGEST = "/suggest";

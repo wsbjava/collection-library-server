@@ -5,7 +5,9 @@ import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 import pl.wsb.collection.exceptions.ValidationException;
+import pl.wsb.collection.hibernate.Role;
 import pl.wsb.collection.hibernate.UserAccount;
+import pl.wsb.collection.hibernate.UserAccountRole;
 import pl.wsb.collection.model.RegisterUserRequest;
 import pl.wsb.collection.model.User;
 import pl.wsb.collection.repository.AbstractRepository;
@@ -14,6 +16,7 @@ import pl.wsb.collection.repository.EntityManagerHelper;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -118,6 +121,32 @@ public class UserAccountRepository extends AbstractRepository<UserAccount, Integ
         criteriaQuery.select(root);
 
         return EntityManagerHelper.entityManager().createQuery(criteriaQuery).getResultList();
+    }
+
+    public UserAccount setRole(Integer id, String roleAbbr) throws ValidationException {
+        if(id < 1){
+            throw new ValidationException("Please specify a correct User");
+        }
+
+        UserAccount userAccount = this.find(id);
+
+        if(userAccount == null){
+            throw new ValidationException("The provide user does not exist!");
+        }
+
+        UserAccountRoleRepository userAccountRoleRepository = new UserAccountRoleRepository();
+
+        for(UserAccountRole userAccountRole : userAccount.getUserAccountRoles()){
+            userAccountRoleRepository.unAssingUserToRole(userAccount, userAccountRole.getRole());
+        }
+
+        for(Role role :  new RoleRepository().findAllByAbbr(roleAbbr))
+        {
+            userAccountRoleRepository.assignUserToRole(userAccount, role);
+        }
+
+
+        return userAccount;
     }
 }
 

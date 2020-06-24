@@ -1,6 +1,8 @@
 package pl.wsb.collection.hibernate;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.io.Serializable;
 import javax.persistence.*;
@@ -33,19 +35,19 @@ public class CollectionLibrary implements Serializable {
 	private Date modified;
 
 	//bi-directional many-to-one association to CollectionEntry
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name="collection_entry_id", nullable=false)
-	@JsonBackReference
+	@JsonManagedReference("CollectionEntry")
 	private CollectionEntry collectionEntry;
 
 	//bi-directional many-to-one association to CollectionLibraryStatus
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="collection_library_status_id")
-	@JsonBackReference
+	@JsonManagedReference
 	private CollectionLibraryStatus collectionLibraryStatus;
 
 	//bi-directional many-to-one association to UserAccount
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="user_account_id", nullable=false)
 	@JsonBackReference
 	private UserAccount userAccount;

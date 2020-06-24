@@ -1,6 +1,7 @@
 package pl.wsb.collection.repository.impl;
 
 import org.apache.commons.lang.StringUtils;
+import pl.wsb.collection.exceptions.ValidationException;
 import pl.wsb.collection.hibernate.Role;
 import pl.wsb.collection.repository.AbstractRepository;
 import pl.wsb.collection.repository.EntityManagerHelper;
@@ -8,6 +9,7 @@ import pl.wsb.collection.repository.EntityManagerHelper;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RoleRepository extends AbstractRepository<Role, Integer> {
@@ -63,6 +65,36 @@ public class RoleRepository extends AbstractRepository<Role, Integer> {
         criteriaQuery.select(roles);
 
         return EntityManagerHelper.entityManager().createQuery(criteriaQuery).getResultList();
+    }
+
+
+    public List<Role> findAllByAbbr(String abbr) throws ValidationException {
+
+        if(StringUtils.isBlank(abbr)){
+            throw new ValidationException("Please specify a role name");
+        }
+
+        Role provideRole = this.findByAbbr(abbr);
+        if(provideRole == null){
+            throw new ValidationException("Provided role does not exist!");
+        }
+
+        List<Role> allRoles = this.findAll(0,0,"");
+        List<Role> returnRole = new ArrayList<>();
+
+        for (Role role : allRoles){
+
+            if(role.getId() >= provideRole.getId()){
+                returnRole.add(role);
+            }
+        }
+
+        return returnRole;
+
+
+
+
+
     }
 }
 
