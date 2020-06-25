@@ -4,6 +4,8 @@ package pl.wsb.collection.api;
 import pl.wsb.collection.api.consts.ApiEndpoints;
 import pl.wsb.collection.api.handlers.ErrorHandler;
 import pl.wsb.collection.exceptions.ValidationException;
+import pl.wsb.collection.model.Item;
+import pl.wsb.collection.model.ItemList;
 import pl.wsb.collection.model.ItemRequest;
 import pl.wsb.collection.repository.impl.CollectionEntryRepository;
 import pl.wsb.collection.security.annotation.Authenticate;
@@ -29,7 +31,7 @@ public class CollectionEntryResource {
             return Response.status(
                     Response.Status.OK
             ).entity(
-                    collectionEntryRepository.findAll(limit,offset,search)
+                    new ItemList().createFromCollectryEntryList(collectionEntryRepository.findAll(limit,offset,search))
             ).build();
         } catch (Exception ex) {
             return Response.status(
@@ -48,7 +50,7 @@ public class CollectionEntryResource {
             return Response.status(
                     Response.Status.OK
             ).entity(
-                    collectionEntryRepository.findByStatus("Pending")
+                    new ItemList().createFromCollectryEntryList(collectionEntryRepository.findByStatus("Pending"))
             ).build();
         } catch (Exception ex) {
             return Response.status(
@@ -67,7 +69,7 @@ public class CollectionEntryResource {
             return Response.status(
                     Response.Status.OK
             ).entity(
-                    collectionEntryRepository.findByStatus("Rejected")
+                    new ItemList().createFromCollectryEntryList(collectionEntryRepository.findByStatus("Rejected"))
             ).build();
         } catch (Exception ex) {
             return Response.status(
@@ -86,7 +88,7 @@ public class CollectionEntryResource {
             return Response.status(
                     Response.Status.OK
             ).entity(
-                    collectionEntryRepository.findByStatus("Accepted")
+                    new ItemList().createFromCollectryEntryList(collectionEntryRepository.findByStatus("Accepted"))
             ).build();
         } catch (Exception ex) {
             return Response.status(
@@ -106,7 +108,7 @@ public class CollectionEntryResource {
             return Response.status(
                     Response.Status.OK
             ).entity(
-                    collectionEntryRepository.find(id)
+                    new Item().getItemFromDB(collectionEntryRepository.find(id))
             ).build();
         } catch (Exception ex) {
             return Response.status(
@@ -129,7 +131,7 @@ public class CollectionEntryResource {
             return Response.status(
                     Response.Status.OK
             ).entity(
-                    collectionEntryRepository.registerEntry(body)
+                    new Item().getItemFromDB(collectionEntryRepository.registerEntry(body))
             ).build();
         }
         catch (ValidationException ex) {
@@ -157,8 +159,6 @@ public class CollectionEntryResource {
             CollectionEntryRepository collectionEntryRepository = new CollectionEntryRepository();
             return Response.status(
                     Response.Status.OK
-            ).entity(
-                    collectionEntryRepository.find(id)
             ).build();
         } catch (Exception ex) {
             return Response.status(
@@ -178,7 +178,7 @@ public class CollectionEntryResource {
             return Response.status(
                     Response.Status.OK
             ).entity(
-                    collectionEntryRepository.acceptEntry(id)
+                    new Item().getItemFromDB(collectionEntryRepository.acceptEntry(id))
             ).build();
         } catch (Exception ex) {
             return Response.status(
@@ -198,7 +198,7 @@ public class CollectionEntryResource {
             return Response.status(
                     Response.Status.OK
             ).entity(
-                    collectionEntryRepository.rejectEntry(id)
+                    new Item().getItemFromDB(collectionEntryRepository.rejectEntry(id))
             ).build();
         } catch (Exception ex) {
             return Response.status(
@@ -221,7 +221,7 @@ public class CollectionEntryResource {
             return Response.status(
                     Response.Status.OK
             ).entity(
-                    collectionEntryRepository.assingGenre(id, abbr)
+                    new Item().getItemFromDB(collectionEntryRepository.assingGenre(id, abbr))
             ).build();
         } catch (Exception ex) {
             return Response.status(
@@ -244,7 +244,7 @@ public class CollectionEntryResource {
             return Response.status(
                     Response.Status.OK
             ).entity(
-                    collectionEntryRepository.unAssingGenre(id, abbr)
+                    new Item().getItemFromDB(collectionEntryRepository.unAssingGenre(id, abbr))
             ).build();
         } catch (Exception ex) {
             return Response.status(

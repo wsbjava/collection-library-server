@@ -13,11 +13,17 @@
 
 package pl.wsb.collection.model;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import pl.wsb.collection.hibernate.CollectionEntry;
+import pl.wsb.collection.hibernate.CollectionEntryAuthor;
+import pl.wsb.collection.hibernate.CollectionEntryGenre;
+
 import java.util.Date;
 import javax.validation.constraints.*;
 
@@ -236,6 +242,35 @@ public class Item   {
       return "null";
     }
     return o.toString().replace("\n", "\n    ");
+  }
+
+  public static Item getItemFromDB(CollectionEntry collectionEntry) throws ParseException {
+
+    Item item = new Item();
+    item.id(collectionEntry.getId());
+    item.publisher("Publisher");
+    item.title(collectionEntry.getTitle());
+    String genre = "";
+    for(CollectionEntryGenre collectionEntryGenre : collectionEntry.getCollectionEntryGenres()){
+      genre += collectionEntryGenre.getGenre().getName() + ", ";
+    }
+
+    item.genre(genre);
+
+    pl.wsb.collection.hibernate.Author author = new pl.wsb.collection.hibernate.Author();
+    for(CollectionEntryAuthor collectionEntryAuthor : collectionEntry.getCollectionEntryAuthors()){
+      author = collectionEntryAuthor.getAuthor();
+    }
+
+    item.author(new Author().getAuthorFromDB(author));
+
+
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy");
+    Date date1 = formatter.parse("2012");
+    item.dateOfRelease(date1);
+    item.type(collectionEntry.getCollectionType().getName());
+
+    return item;
   }
 }
 

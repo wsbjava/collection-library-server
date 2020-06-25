@@ -3,6 +3,7 @@ package pl.wsb.collection.api;
 import pl.wsb.collection.api.consts.ApiEndpoints;
 import pl.wsb.collection.api.handlers.ErrorHandler;
 import pl.wsb.collection.exceptions.ValidationException;
+import pl.wsb.collection.model.Author;
 import pl.wsb.collection.model.AuthorRequest;
 import pl.wsb.collection.model.User;
 import pl.wsb.collection.repository.impl.AuthorRepository;
@@ -50,7 +51,7 @@ public class AuthorResource {
             return Response.status(
                     Response.Status.OK
             ).entity(
-                    authorRepository.find(id)
+                    new Author().getAuthorFromDB(authorRepository.find(id))
             ).build();
         } catch (Exception ex) {
             return Response.status(
@@ -76,7 +77,7 @@ public class AuthorResource {
             return Response.status(
                     Response.Status.OK
             ).entity(
-                    authorRepository.registerBody(body)
+                    new Author().getAuthorFromDB(authorRepository.registerBody(body))
             ).build();
         } catch (ValidationException e) {
             e.printStackTrace();

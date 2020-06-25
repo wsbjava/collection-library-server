@@ -18,6 +18,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import pl.wsb.collection.security.annotation.Authenticate;
+
 import javax.validation.constraints.*;
 
 /**
@@ -136,5 +138,14 @@ public class Author   {
     }
     return o.toString().replace("\n", "\n    ");
   }
+
+  public static Author getAuthorFromDB(pl.wsb.collection.hibernate.Author db){
+    Author author = new Author();
+    author.lastName(db.getLastName());
+    author.firstName(db.getFirstName());
+    author.id(db.getId());
+    return author;
+  }
+
 }
 

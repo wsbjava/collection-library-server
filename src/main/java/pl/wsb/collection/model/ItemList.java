@@ -13,11 +13,15 @@
 
 package pl.wsb.collection.model;
 
+import java.text.ParseException;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import pl.wsb.collection.hibernate.CollectionEntry;
+import pl.wsb.collection.hibernate.CollectionEntryAuthor;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.*;
@@ -119,5 +123,23 @@ public class ItemList   {
     }
     return o.toString().replace("\n", "\n    ");
   }
+
+  public static ItemList createFromCollectryEntryList(List<CollectionEntry> list) throws ParseException {
+      ItemList itemLists = new ItemList();
+
+      itemLists.total(list.size());
+      List<Item> itemList = new ArrayList<>();
+      for(CollectionEntry collectionEntry : list){
+        itemList.add(new Item().getItemFromDB(collectionEntry));
+      }
+
+      itemLists.data(itemList);
+
+      return itemLists;
+
+
+  }
+
+
 }
 
