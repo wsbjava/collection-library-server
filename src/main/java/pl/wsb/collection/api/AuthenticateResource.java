@@ -1,7 +1,7 @@
 package pl.wsb.collection.api;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.http.util.EntityUtils;
+//import org.apache.http.util.EntityUtils;
 import pl.wsb.collection.api.consts.ApiEndpoints;
 import pl.wsb.collection.api.handlers.ErrorHandler;
 import pl.wsb.collection.exceptions.UnauthenticatedException;
